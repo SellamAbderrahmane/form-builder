@@ -1,0 +1,156 @@
+@import 'variables';
+
+:host {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-layout {
+  height: 100%;
+  overflow: hidden;
+}
+
+nz-breadcrumb {
+  border-bottom: 1px solid #f0f0f0;
+  background: white;
+  padding: 0.7em 1.7em;
+}
+
+// .content {
+//   // nz-content {
+//   //   padding: 1rem;
+//   // }
+// }
+
+// .content {
+//   display: flex;
+//   overflow: hidden;
+
+//   nz-content {
+//     flex: 1;
+//     // background-color: $layout-content-color;
+
+//     .inner-content {
+//       padding: 10px;
+//       min-height: 100%;
+//       height: 100%;
+//       overflow: auto;
+//     }
+//   }
+// }
+
+.menu-item {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: inherit;
+}
+
+.menu-sidebar {
+  position: relative;
+  z-index: 999;
+  box-shadow: 1px 2px 5px #e7f1f5;
+
+  &.ant-layout-sider-collapsed {
+    @media (max-width: 528px) {
+      width: 0 !important;
+      flex: 0 0 0 !important;
+      min-width: 0 !important;
+    }
+  }
+}
+
+.ant-menu-inline,
+.ant-menu-vertical,
+.ant-menu-vertical-left {
+  border-right: none;
+}
+
+.app-header {
+  position: relative;
+  z-index: 999;
+  padding: 0 16px;
+  display: flex;
+  background: #fff;
+  box-shadow: $base-shadow;
+  // border-top: 4px solid;
+  // animation: headerTopLineAnimation 7s infinite alternate;
+
+  .logo {
+    display: inline-flex;
+    text-align: center;
+    width: 70%;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .header-menu {
+    flex: auto;
+    border: none;
+
+    .ant-menu-item {
+      vertical-align: top;
+    }
+  }
+
+  .center {
+    flex: auto;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .right {
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+}
+
+.horizontal-list {
+  overflow: hidden;
+  display: flex;
+  list-style: none;
+  outline: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  font-weight: 500;
+
+  li {
+    display: block;
+    flex: 0 1 auto;
+    padding: 0 5px;
+    cursor: pointer;
+  }
+}
+
+.trigger {
+  display: block;
+  font-size: 20px;
+  margin: 0 24px 0 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.lang {
+  height: inherit;
+  display: flex;
+  gap: 0.3em;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 528px) {
+  .menu-sidebar {
+    position: absolute;
+  }
+}

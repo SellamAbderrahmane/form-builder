@@ -1,0 +1,66 @@
+.upload {
+  .ant-upload.ant-upload-drag {
+    background: #fbfbff !important;
+    border-radius: 5px !important;
+  }
+
+  .ant-upload-drag-icon {
+    margin: 0 5px;
+  }
+
+  .ant-upload-text {
+    color: #61aee3 !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+  }
+}
+
+.upload-list {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: "tnum";
+  line-height: 22px;
+
+  .upload-list-item {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 3px;
+    border: 1px solid #f7f7f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .content {
+      display: flex;
+      align-items: center;
+      img {
+        margin: 0 10px 0 0;
+      }
+
+      .file {
+        display: grid;
+        .filename {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          /* width: 100px; */
+          white-space: nowrap;
+        }
+      }
+    }
+
+    &:hover {
+      background: #f7f7f7;
+    }
+  }
+}
+
+.active-file {
+  background: #fbfbff;
+}

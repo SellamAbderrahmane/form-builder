@@ -1,0 +1,186 @@
+<div>
+  <div nz-row style="margin-bottom: 5px">
+    <div nz-col class="gutter-row" nzLg="8" nzSm="24">
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search" class="blue"></i>
+      </ng-template>
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input
+          type="text"
+          nz-input
+          [placeholder]="'SEARCH' | translate"
+          [(ngModel)]="searchString"
+        />
+      </nz-input-group>
+    </div>
+    <div
+      nz-col
+      class="gutter-row grid-header-actions"
+      nzLg="16"
+      nzSm="24"
+      style="display: flex; padding: 0 4px; justify-content: flex-end"
+    >
+      <dms-button [btns]="settings.actions"></dms-button>
+    </div>
+  </div>
+
+  <nz-table
+    #basicTable
+    nzSimple
+    [nzData]="dataset"
+    [nzScroll]="scroll"
+    [nzLoading]="loading"
+    [nzSize]="settings.size"
+    [nzTitle]="settings.title"
+    [nzSimple]="settings.simple"
+    [nzFooter]="settings.footer"
+    [nzBordered]="settings.bordered"
+    [nzTableLayout]="settings.tableLayout"
+    [nzShowPagination]="settings.pagination"
+    [nzFrontPagination]="settings.pagination"
+    [nzPaginationPosition]="settings.position"
+    [nzShowSizeChanger]="settings.sizeChanger"
+    [nzPaginationType]="settings.paginationType"
+    [nzHideOnSinglePage]="true"
+    (nzQueryParams)="queryParams($event)"
+    (nzPageSizeChange)="pageSizeChange($event)"
+    (nzPageIndexChange)="pageIndexChange($event)"
+    (nzCurrentPageDataChange)="currentPageDataChange($event)"
+  >
+    <thead>
+      <tr>
+        <th
+          nzWidth="40px"
+          *ngIf="settings.expandable || expandSet.size > 0"
+          [nzLeft]="true"
+        ></th>
+        <th
+          nzWidth="60px"
+          [nzLeft]="true"
+          nzShowCheckbox
+          *ngIf="settings.checkbox"
+          [(nzChecked)]="allChecked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="checkAll($event)"
+        ></th>
+
+        <ng-container *ngFor="let head of columnDefs">
+          <th
+            *ngIf="!expandSet.has(head) && head.actions?.length <= 0"
+            [nzWidth]="head.width || 'auto'"
+            [nzBreakWord]="settings.breakWord"
+            [nzLeft]="head.fixedLeft ?? false"
+            [nzRight]="head.fixedRight ?? false"
+            [nzEllipsis]="settings.ellipsis"
+          >
+            <span translate class="th-content">{{ head.headerName }}</span>
+          </th>
+
+          <th
+            nzWidth="40px"
+            *ngIf="head.actions?.length > 0"
+            [nzRight]="true"
+          ></th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container
+        *ngFor="
+          let data of basicTable.data | tableFilter: columnDefs:searchString;
+          index as i
+        "
+      >
+        <tr>
+          <td
+            nzShowExpand
+            [nzLeft]="true"
+            *ngIf="settings.expandable || expandSet.size > 0"
+            [(nzExpand)]="data.expand"
+            (nzExpandChange)="onExpandChange(i, $event)"
+          ></td>
+
+          <td
+            nzWidth="60px"
+            [nzLeft]="true"
+            nzShowCheckbox
+            *ngIf="settings.checkbox"
+            [(nzChecked)]="data.checked"
+            (nzCheckedChange)="refreshStatus()"
+          ></td>
+          <ng-container *ngFor="let head of columnDefs">
+            <td
+              *ngIf="!expandSet.has(head) && head.actions?.length <= 0"
+              [nzBreakWord]="settings.breakWord"
+              [nzEllipsis]="settings.ellipsis"
+              [nzLeft]="head.fixedLeft ?? false"
+              [nzRight]="head.fixedRight ?? false"
+            >
+              <ng-container
+                cell-render
+                [template]="head.cellRender || headContent"
+                [context]="{ value: data[head.field], colDef: head }"
+              ></ng-container>
+
+              <ng-template #headContent>
+                <span>{{ data[head.field] }}</span>
+              </ng-template>
+            </td>
+
+            <td
+              nzWidth="40px"
+              [nzRight]="true"
+              *ngIf="head.actions?.length > 0 && !data.disabled"
+            >
+              <a
+                nz-dropdown
+                [nzDropdownMenu]="menu"
+                nzPlacement="bottomRight"
+                nzTrigger="click"
+              >
+                <i nz-icon nzType="more"></i>
+              </a>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu nzSelectable>
+                  <li
+                    nz-menu-item
+                    style="padding: 0"
+                    *ngFor="let action of head.actions"
+                  >
+                    <dms-button [btn]="action" [data]="data"></dms-button>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </ng-container>
+        </tr>
+
+        <!-- <tr *ngIf="settings.expandable" [nzExpand]="data.expand">
+          <span>{{ data.description }}</span>
+        </tr> -->
+
+        <tr *ngIf="expandData.has(i)" [nzExpand]="data.expand">
+          <div class="hover-element">
+            <ng-container *ngFor="let head of expandSet">
+              <tr>
+                <th>{{ head.headerName | translate }}</th>
+                :
+                <td>
+                  <ng-container
+                    cell-render
+                    [template]="head.cellRender || headContent"
+                    [context]="{ value: data[head.field], colDef: head }"
+                  ></ng-container>
+
+                  <ng-template #headContent>
+                    <span translate>{{ data[head.field] }}</span>
+                  </ng-template>
+                </td>
+              </tr>
+            </ng-container>
+          </div>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</div>

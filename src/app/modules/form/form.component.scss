@@ -1,0 +1,11 @@
+@import 'variables';
+
+.module-layout {
+  nz-content {
+    background-color: $inner-layout-content-color;
+  }
+
+  nz-sider {
+    border-left: 1px solid $border-color;
+  }
+}
