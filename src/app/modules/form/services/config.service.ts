@@ -213,73 +213,79 @@ export class FormConfigService {
   async loadFormElementsParams() {
     return {
       input: {
-        label: {
-          span: 24,
-          group: true,
-          key: "label",
-          type: "text",
-          // prefixIcon: "lock",
-          label: "Label",
-          placeholder: "Label",
+        param: {
+          label: {
+            span: 24,
+            group: true,
+            key: "label",
+            type: "text",
+            // prefixIcon: "lock",
+            label: "Label",
+            placeholder: "Label",
+          },
+          placeholder: {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "placeholder",
+            label: "Placeholder",
+            placeholder: "Enter placeholder",
+          },
+          description: {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "description",
+            label: "Description",
+            placeholder: "Enter description",
+          },
         },
-        placeholder: {
-          span: 24,
-          group: true,
-          type: "text",
-          key: "placeholder",
-          label: "Placeholder",
-          placeholder: "Enter placeholder",
-        },
-        description: {
-          span: 24,
-          group: true,
-          type: "text",
-          key: "description",
-          label: "Description",
-          placeholder: "Enter description",
-        },
+        style: {},
       },
       editable: {
-        value: {
-          span: 24,
-          group: true,
-          type: "text",
-          key: "value",
-          value: "Untitled",
-          label: "Title",
-          placeholder: "Enter title",
+        param: {
+          value: {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "value",
+            value: "Untitled",
+            label: "Title",
+            placeholder: "Enter title",
+          },
         },
-        textAlign: {
-          span: 24,
-          group: true,
-          key: "textAlign",
-          type: "select",
-          label: "Text Align",
-          value: 'left',
-          isStyle: true,
-          placeholder: "Text Align",
-          options: [
-            { label: "Center", value: "center" },
-            { label: "Left", value: "left" },
-            { label: "Right", value: "right" },
-          ],
-        },
-      },
-      date: {
-        dateMode: {
-          span: 24,
-          group: true,
-          key: "dateMode",
-          type: "select",
-          label: "Type",
-          placeholder: "Type",
-          options: [
-            { label: "Week", value: "week" },
-            { label: "Month", value: "month" },
-          ],
+        style: {
+          textAlign: {
+            span: 24,
+            group: true,
+            key: "textAlign",
+            type: "select",
+            label: "Text Align",
+            value: "left",
+            placeholder: "Text Align",
+            options: [
+              { label: "Center", value: "center" },
+              { label: "Left", value: "left" },
+              { label: "Right", value: "right" },
+            ],
+          },
         },
       },
-      select: {},
+      // date: {
+      //   dateMode: {
+      //     span: 24,
+      //     group: true,
+      //     key: "dateMode",
+      //     type: "select",
+      //     label: "Type",
+      //     placeholder: "Type",
+      //     options: [
+      //       { label: "Week", value: "week" },
+      //       { label: "Month", value: "month" },
+      //     ],
+      //   },
+      // },
+      // select: {},
     }
   }
 
@@ -290,22 +296,42 @@ export class FormConfigService {
       case "text":
       case "password":
       case "number":
-        return {
-          fields: Object.values(formElementParams.input),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams.input)), (k) => formElementParams.input[k]?.value),
+        const param = {
+          fields: Object.values(formElementParams.input.param),
+          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.param)), (k) => formElementParams.input.param[k]?.value)
         }
+
+        const style = {
+          fields: Object.values(formElementParams.input.style),
+          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.style)), (k) => formElementParams.input.style[k]?.value)
+        }
+
+        return { param, style }
       default: {
         const object = formElementParams[type]
         if (!object)
           return {
-            fields: [],
-            formgroup: {},
+            param: {
+              fields: [],
+              formgroup: {},
+            },
+            style: {
+              fields: [],
+              formgroup: {},
+            },
           }
 
-        return {
-          fields: Object.values(formElementParams[type]),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams[type])), (k) => formElementParams[type][k]?.value),
+        const param = {
+          fields: Object.values(formElementParams[type].param),
+          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].param)), (k) => formElementParams[type].param[k]?.value)
         }
+
+        const style = {
+          fields: Object.values(formElementParams[type].style),
+          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].style)), (k) => formElementParams[type].style[k]?.value)
+        }
+
+        return { param, style }
       }
     }
   }

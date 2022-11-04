@@ -1,8 +1,7 @@
 <nz-layout class="module-layout">
   <nz-sider class="style-sider" nzWidth="300px" [nzTheme]="config.state.theme" *ngIf="service.paramForm">
-    <dms-form [fields]="service.paramFormFields" [formGroup]="service.paramForm" [footer]="footer">
-      <ng-template #footer></ng-template>
-    </dms-form>
+    <dms-form [fields]="service.paramFormFields" [formGroup]="service.paramForm" [showFooter]="false"> </dms-form>
+    <dms-form [fields]="service.styleFormFields" [formGroup]="service.styleForm" [showFooter]="false"> </dms-form>
   </nz-sider>
   <nz-content>
     <form
@@ -12,15 +11,19 @@
       id="formContainer"
       nzLayout="vertical"
       dragAndDropManager
-      [cdkDropListData]="service.state.formData"
+      [cdkDropListData]="service.state.formData?.children"
       (cdkDropListDropped)="droped($event)"
     >
-      <ng-container *ngFor="let field of service.state.formData; let i = index">
+      <ng-container *ngFor="let field of service.state.formData?.children; let i = index">
         <form-element
           [element]="field"
-          [param]="field.formdata?.formgroup?.value"
-          (ondelete)="service.state.formData.splice(i, 1)"
+          [parent]="service.state.formData"
+          [elementIndex]="i"
+          [config]="field.formparam?.formgroup?.value"
+          [style]="field.formstyle?.formgroup?.value"
           (droped)="droped($event)"
+          (ondelete)="ondelete($event)"
+          (onselect)="onselect($event)"
         ></form-element>
       </ng-container>
     </form>

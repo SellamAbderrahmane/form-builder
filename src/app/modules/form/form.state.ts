@@ -5,7 +5,7 @@ export type FORM_ELEM_PARAM = { [key: string]: { [key: string]: FormField & any 
 
 export interface FormState {
   loading?: boolean
-  formData?: any[]
+  formData?: any
   formElements?: any[]
   formElementParams?: FORM_ELEM_PARAM
 }
@@ -14,7 +14,9 @@ export type SForm = StateConfig<FormState>
 
 export const initialState: FormState = {
   loading: false,
-  formData: [],
+  formData: {
+    children: [],
+  },
   formElements: [],
   formElementParams: {},
 }

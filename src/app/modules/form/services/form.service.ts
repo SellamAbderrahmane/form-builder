@@ -11,6 +11,9 @@ export class FormService {
   paramForm: FormGroup
   paramFormFields: FormField[]
 
+  styleForm: FormGroup
+  styleFormFields: FormField[]
+
   constructor(private fb: FormBuilder, private formconfig: FormConfigService, private store: Store<StateConfig<FormState>>) {}
 
   get state(): FormState {
@@ -18,14 +21,19 @@ export class FormService {
   }
 
   onItemAdded(element: any) {
-    if(element.formdata) return element.formdata
-    
+    if (element.formdata) return element.formdata
+
     const formdata = this.formconfig.getElementFormData(element.type)
-console.log(formdata);
 
     return {
-      fields: formdata.fields,
-      formgroup: this.fb.group(formdata.formgroup),
+      formparam: {
+        fields: formdata.param.fields,
+        formgroup: this.fb.group(formdata.param.formgroup),
+      },
+      formstyle: {
+        fields: formdata.style.fields,
+        formgroup: this.fb.group(formdata.style.formgroup),
+      },
     }
   }
 
@@ -36,17 +44,19 @@ console.log(formdata);
 
   onItemSelected(item: any) {
     if (!item) {
-      this.paramForm = null
-      this.paramFormFields = []
+      this.styleForm = this.paramForm = null
+      this.styleFormFields = this.paramFormFields = []
       return
     }
 
-    this.paramForm = item.formdata.formgroup
-    this.paramFormFields = item.formdata.fields
+    this.paramForm = item.formparam.formgroup
+    this.paramFormFields = item.formparam.fields
+
+    this.styleForm = item.formstyle.formgroup
+    this.styleFormFields = item.formstyle.fields
   }
 
   onSubmit() {
-    console.log(this.state.formData);
-    
+    console.log(this.state.formData)
   }
 }

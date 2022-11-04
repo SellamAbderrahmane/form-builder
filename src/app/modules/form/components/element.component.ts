@@ -1,7 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, OnDestroy } from "@angular/core"
 import { isNil, merge, pickBy } from "lodash-es"
-import { BehaviorSubject, Subscription } from "rxjs"
-import { FormService } from "../services/form.service"
 
 @Component({
   selector: "form-element",
@@ -18,13 +16,17 @@ import { FormService } from "../services/form.service"
         >
           <form-element
             *ngFor="let colEl of col.children; let colIdx = index"
+            [parent]="col"
             [element]="colEl"
-            [param]="colEl.formdata?.formgroup?.value"
-            (ondelete)="col.children.splice(colIdx, 1)"
+            [elementIndex]="colIdx"
+            [config]="colEl.formparam?.formgroup?.value"
+            [style]="colEl.formstyle?.formgroup?.value"
+            (ondelete)="deleteChild($event)"
+            (onselect)="onselect.emit($event)"
           ></form-element>
         </nz-col>
         <div class="row-controls">
-          <button nz-button nzSize="small" nzDanger nzShape="circle" (click)="ondelete.emit(element)">
+          <button nz-button nzSize="small" nzDanger nzShape="circle" (click)="deleteElement()">
             <i nz-icon nzType="delete"></i>
           </button>
         </div>
@@ -36,17 +38,17 @@ import { FormService } from "../services/form.service"
         id="elementContainer"
         [cdkDragData]="element"
         (click)="containerClick()"
-        [ngClass]="{ 'active-container': showControls.value }"
+        [ngClass]="{ 'active-container': showControls }"
       >
         <nz-form-label *ngIf="elementconfig.label && elementconfig.type !== 'checkbox'" [nzRequired]="elementconfig.required" [nzFor]="element.key">
           <span>{{ elementconfig.label }}</span>
         </nz-form-label>
         <nz-form-control readonly [nzExtra]="elementconfig.description">
-          <ng-template form-element ngDefaultControl [config]="elementconfig" [style]="elementstyle"></ng-template>
+          <ng-template form-element ngDefaultControl [config]="elementconfig" [style]="style"></ng-template>
         </nz-form-control>
 
-        <div class="element-controls" *ngIf="showControls.value">
-          <button nz-button nzSize="small" nzDanger nzShape="circle" (click)="ondelete.emit(element)">
+        <div class="element-controls" *ngIf="showControls">
+          <button nz-button nzSize="small" nzDanger nzShape="circle" (click)="deleteElement()">
             <i nz-icon nzType="delete"></i>
           </button>
           <button nz-button nzSize="small" cdkDragHandle nzShape="circle">
@@ -114,27 +116,12 @@ import { FormService } from "../services/form.service"
 })
 export class FormElementComponent implements OnInit, OnDestroy {
   @Input() element: any
-  @Input() set param(v: any) {
-    const value = Object.entries(v).reduce(
-      (acc, [key, value]: any) => {
-        if (isNil(v)) return acc
-
-        const field = this.element.formdata.fields.find((el: any) => el.key === key)
-
-        if (field.isStyle) acc.style[key] = value
-        else acc.config[key] = value
-
-        return acc
-      },
-      {
-        style: {},
-        config: { type: this.element.type, readOnly: true },
-      }
-    )
-
-    this.elementconfig = value.config
-    this.elementstyle = value.style
-    // this.elementconfig = merge({}, this.element, value)
+  @Input() parent: any
+  @Input() elementIndex: number
+  @Input() style: any
+  @Input() set config(v: any) {
+    const value = pickBy(v, (v) => !isNil(v))
+    this.elementconfig = merge({ type: this.element.type, value: this.element.value, readOnly: true }, value)
   }
 
   @Output() droped: EventEmitter<any> = new EventEmitter()
@@ -142,39 +129,36 @@ export class FormElementComponent implements OnInit, OnDestroy {
   @Output() onselect: EventEmitter<any> = new EventEmitter()
 
   elementconfig: any
-  elementstyle: any
-  deleteSubscription: Subscription
-  showControls: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  showControls: boolean
 
-  constructor(private elementRef: ElementRef, public service: FormService) {}
+  constructor(private elementRef: ElementRef) {}
 
-  ngOnDestroy(): void {
-    if (this.deleteSubscription) {
-      this.deleteSubscription.unsubscribe()
-    }
-  }
+  ngOnDestroy(): void {}
 
-  ngOnInit() {
-    this.element.readOnly = true
-    this.deleteSubscription = this.ondelete.subscribe((el) => this.service.onItemRemoved(el))
-  }
+  ngOnInit() {}
 
   containerClick() {
-    this.showControls.next(true)
+    this.showControls = true
     this.onselect.emit(this.element)
+  }
 
-    this.service.onItemSelected(this.element)
+  deleteElement() {
+    this.ondelete.emit({ parent: this.parent, element: this.element, elementIndex: this.elementIndex })
+  }
+
+  deleteChild({ element, parent, elementIndex }) {
+    this.ondelete.emit({ parent, element, elementIndex })
   }
 
   @HostListener("document:click", ["$event"])
   clickout(event: any) {
     const formContainer = this.elementRef.nativeElement.closest("#formContainer")
     if (!event.target.closest("#elementContainer") && formContainer.contains(event.target)) {
-      this.service.onItemSelected(null)
+      this.onselect.emit(null)
     }
 
     if (!this.elementRef.nativeElement.contains(event.target) && formContainer.contains(event.target)) {
-      this.showControls.next(false)
+      this.showControls = false
     }
   }
 }

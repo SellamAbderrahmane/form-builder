@@ -4,7 +4,6 @@ import { CdkDragDrop, CdkDragExit, copyArrayItem, transferArrayItem, moveItemInA
 
 import { ConfigService } from "src/app/shared"
 import { FormService } from "./services/form.service"
-import { v4 as uuid } from "uuid"
 
 @Component({
   selector: "app-form",
@@ -18,7 +17,10 @@ export class FormComponent implements OnInit {
 
   droped(event: CdkDragDrop<any>) {
     const { previousContainer, container, previousIndex, currentIndex, item } = event
-    item.data.formdata = this.service.onItemAdded(item.data)
+
+    const { formstyle, formparam } = this.service.onItemAdded(item.data)
+    item.data.formparam = formparam
+    item.data.formstyle = formstyle
 
     if (previousContainer !== container) {
       if (previousContainer.id === "source") {
@@ -50,5 +52,16 @@ export class FormComponent implements OnInit {
 
   entered(event: any) {
     // remove(event.item.data, { temp: true })
+  }
+
+  ondelete({ element, elementIndex, parent }: any) {
+    if (!parent?.children) return
+
+    parent.children.splice(elementIndex, 1)
+    this.service.onItemRemoved(element)
+  }
+
+  onselect(element: any) {
+    this.service.onItemSelected(element)
   }
 }
