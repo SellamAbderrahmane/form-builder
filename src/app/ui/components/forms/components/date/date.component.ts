@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { DateConfig } from './date.interface';
-import { merge } from 'lodash-es';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core"
+import { FormControl } from "@angular/forms"
+import { DateConfig } from "./date.interface"
+import { merge } from "lodash-es"
 
 @Component({
-  selector: 'dms-date',
+  selector: "dms-date",
   template: `
     <nz-date-picker
       [nzRenderExtraFooter]="config.renderExtraFooter"
@@ -16,7 +16,7 @@ import { merge } from 'lodash-es';
       [nzDisabledDate]="config.disabledDate"
       [nzDropdownClassName]="config.dropdownClassName"
       [nzFormat]="config.format"
-      [nzInputReadOnly]="config.inputReadOnly"
+      [nzInputReadOnly]="config.readOnly"
       [nzLocale]="config.locale"
       [nzMode]="config.dateMode"
       [nzPlaceHolder]="config.placeholder | translate"
@@ -26,21 +26,22 @@ import { merge } from 'lodash-es';
       (ngModelChange)="onChange.emit($event)"
       [formControl]="formControl"
       style="width:100%"
+      [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
     ></nz-date-picker>
   `,
 })
 export class DateComponent implements OnInit {
-  @Input() config: DateConfig = {};
-  @Input() formControl: FormControl = new FormControl();
+  @Input() config: DateConfig = {}
+  @Input() formControl: FormControl = new FormControl()
 
-  @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
 
   constructor() {}
 
   ngOnInit() {
     this.config = merge(this.config, {
       allowClear: true,
-      format: 'MM/dd/yyyy',
-    });
+      format: "dd/MM/yyyy",
+    })
   }
 }

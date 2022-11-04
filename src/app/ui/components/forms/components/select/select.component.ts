@@ -29,6 +29,7 @@ import { defaultsDeep } from 'lodash-es';
       [nzSize]="config.size"
       [nzSuffixIcon]="config.suffixIcon"
       [nzMode]="config.selectMode"
+      [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
     >
       <ng-container *ngIf="config.selectGroup?.length <= 0; else temp">
         <ng-container *ngFor="let option of config.options">

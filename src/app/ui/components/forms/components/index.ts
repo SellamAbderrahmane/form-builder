@@ -15,3 +15,6 @@ export * from './select/select.interface';
 
 export * from './date/date.component';
 export * from './date/date.interface';
+
+export * from './editable/editable.component';
+export * from './editable/editable.interface';

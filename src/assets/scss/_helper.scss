@@ -1,3 +1,14 @@
 .module-layout {
-  min-height: 100% !important;
+  min-height: 100%;
+  height: -webkit-fill-available;
+
+  nz-content {
+    overflow: auto;
+  }
+}
+
+.drag-placeholder {
+  height: 20px;
+  background: $normal-color;
+  border: 1px solid $border-color;
 }

@@ -1,30 +1,44 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { CheckboxConfig } from './chechbox.interface';
-
-// import { merge } from 'lodash-es';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core"
+import { FormControl } from "@angular/forms"
+import { merge } from "lodash-es"
+import { CheckboxConfig } from "./chechbox.interface"
 
 @Component({
-  selector: 'dms-checkbox',
+  selector: "dms-checkbox",
   template: `
-    <nz-checkbox-group
-      (ngModelChange)="onChange.emit($event)"
+    <label
+      nz-checkbox
       [formControl]="formControl"
-    ></nz-checkbox-group>
+      (ngModelChange)="onChange.emit($event)"
+      *ngIf="!config.group; else checkboxgroup"
+      [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+    >
+      {{ config.label }}
+    </label>
+    <ng-template #checkboxgroup>
+      <nz-checkbox-group
+        [formControl]="formControl"
+        (ngModelChange)="onChange.emit($event)"
+        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+      ></nz-checkbox-group>
+    </ng-template>
   `,
 })
 export class CheckboxComponent implements OnInit {
-  @Input() config: CheckboxConfig = null;
-  @Input() group: CheckboxConfig[] = [];
-  @Input() formControl: FormControl = new FormControl();
+  @Input() config: CheckboxConfig = null
+  @Input() formControl: FormControl = new FormControl()
 
-  @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
   constructor() {}
 
   ngOnInit() {
-    if (this.config) {
-      this.group.push(this.config);
-    }
-    this.formControl.setValue(this.group);
+    // this.config = merge(
+    //   {
+    //     value: false,
+    //   },
+    //   this.config
+    // )
+
+    this.formControl.setValue(this.config.value)
   }
 }

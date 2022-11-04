@@ -1,0 +1,67 @@
+<nz-layout class="module-layout">
+  <nz-sider class="style-sider" nzWidth="300px" [nzTheme]="config.state.theme" *ngIf="service.paramForm">
+    <dms-form [fields]="service.paramFormFields" [formGroup]="service.paramForm" [footer]="footer">
+      <ng-template #footer></ng-template>
+    </dms-form>
+  </nz-sider>
+  <nz-content>
+    <form
+      nz-form
+      cdkDropList
+      class="form-aria"
+      id="formContainer"
+      nzLayout="vertical"
+      dragAndDropManager
+      [cdkDropListData]="service.state.formData"
+      (cdkDropListDropped)="droped($event)"
+    >
+      <ng-container *ngFor="let field of service.state.formData; let i = index">
+        <form-element
+          [element]="field"
+          [param]="field.formdata?.formgroup?.value"
+          (ondelete)="service.state.formData.splice(i, 1)"
+          (droped)="droped($event)"
+        ></form-element>
+      </ng-container>
+    </form>
+    <div class="footer">
+      <button nz-button nzType="primary" (click)="service.onSubmit()">Submit</button>
+    </div>
+  </nz-content>
+  <nz-sider nzWidth="360px" [nzTheme]="config.state.theme">
+    <nz-tabset nzSize="large" nzTabPosition="right">
+      <nz-tab
+        id="source"
+        cdkDropList
+        cdkDropListSortingDisabled
+        [nzTitle]="titleTemplate"
+        [cdkDropListData]="element.children"
+        (cdkDropListEntered)="entered($event)"
+        (cdkDropListExited)="exited($event, i)"
+        *ngFor="let element of service.state.formElements; let i = index"
+      >
+        <ng-template #titleTemplate>
+          <i nz-icon [nzType]="element.icon"></i>
+        </ng-template>
+
+        <ul nz-menu nzMode="inline" dragAndDropManager [nzSelectable]="false">
+          <ng-container *ngFor="let item of element.children">
+            <li cdkDrag nz-menu-item class="field-item" [cdkDragData]="item">
+              <div cdkDragHandle>
+                <span nz-icon nzType="holder"></span>
+              </div>
+              <div>
+                <span class="field-icon">
+                  <i nz-icon [nzType]="item.menuConfig.icon"></i>
+                </span>
+                <span translate>{{ item.menuConfig.name }}</span>
+              </div>
+              <span *cdkDragPreview>{{ item.menuConfig.name }}</span>
+              <div class="drag-placeholder" *cdkDragPlaceholder></div>
+            </li>
+          </ng-container>
+        </ul>
+      </nz-tab>
+    </nz-tabset>
+  </nz-sider>
+</nz-layout>

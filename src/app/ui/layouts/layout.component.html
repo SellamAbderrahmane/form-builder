@@ -57,21 +57,13 @@
           ></nz-avatar>
           <nz-dropdown-menu #UserMenu="nzDropdownMenu">
             <ul nz-menu [nzTheme]="'light'">
-              <li
-                style="color: #0bbe84; font-weight: bold"
-                nz-menu-group
-                [nzTitle]="config.state.currentUser?.name"
-              ></li>
+              <li style="color: #0bbe84; font-weight: bold" nz-menu-group [nzTitle]="config.state.currentUser?.name"></li>
               <li nz-menu-divider></li>
               <li nz-menu-item>
-                <a class="text" translate>
-                  <i nz-icon nzType="user" class="success"></i> PROFILE
-                </a>
+                <a class="text" translate> <i nz-icon nzType="user" class="success"></i> PROFILE </a>
               </li>
               <li nz-menu-item (click)="logout()">
-                <a class="text" translate>
-                  <i nz-icon nzType="lock" class="danger"></i> LOGOUT
-                </a>
+                <a class="text" translate> <i nz-icon nzType="lock" class="danger"></i> LOGOUT </a>
               </li>
             </ul>
           </nz-dropdown-menu>
@@ -80,120 +72,15 @@
     </div>
   </nz-header>
   <nz-layout>
-    <!-- <nz-sider
-      nzCollapsible
-      nzWidth="55px"
-      nzBreakpoint="lg"
-      [nzTrigger]="null"
-      class="menu-sidebar"
-      [nzCollapsedWidth]="55"
-      [(nzCollapsed)]="isCollapsed"
-      [nzTheme]="config.state.theme"
-    > -->
-    <!-- <ul
-        nz-menu
-        nzMode="inline"
-        nzMatchRouter
-        [nzInlineCollapsed]="isCollapsed"
-        [nzTheme]="config.state.theme"
-      >
-        <ng-container *ngFor="let menu of config.menus">
-          <li *ngIf="menu.children" nz-submenu [nzTitle]="nzsubmenutitle">
-            <ul>
-              <ng-container *ngFor="let child of menu.children">
-                <li
-                  *ngIf="child.children"
-                  nz-submenu
-                  [nzTitle]="nzsubmenutitle2"
-                >
-                  <ul>
-                    <ng-container *ngFor="let subchild of child.children">
-                      <li
-                        nz-menu-item
-                        nz-tooltip
-                        nzTooltipPlacement="right"
-                        [nzTooltipTitle]="subchild.title | translate"
-                      >
-                        <a
-                          [routerLink]="[menu.url, child.url, subchild.url]"
-                          translate
-                          class="menu-item"
-                        >
-                          <i
-                            nz-icon
-                            [nzType]="subchild.icon"
-                            [class]="subchild.iconClass"
-                          ></i>
-                          {{ subchild.title }}
-                        </a>
-                      </li>
-                    </ng-container>
-                  </ul>
-                </li>
-                <li
-                  *ngIf="!child.children"
-                  nz-menu-item
-                  nzMatchRouter
-                  nz-tooltip
-                  nzTooltipPlacement="right"
-                  [nzTooltipTitle]="child.title | translate"
-                >
-                  <a [routerLink]="[menu.url, child.url]" class="menu-item">
-                    <i
-                      nz-icon
-                      [nzType]="child.icon"
-                      [class]="child.iconClass"
-                    ></i>
-                    <span translate>{{ child.title }}</span>
-                  </a>
-                </li>
-                <ng-template #nzsubmenutitle2>
-                  <i
-                    nz-icon
-                    [nzType]="child.icon"
-                    [class]="child.iconClass"
-                  ></i>
-                  <span translate>{{ child.title }}</span>
-                </ng-template>
-              </ng-container>
-            </ul>
-          </li>
-          <li
-            *ngIf="!menu.children"
-            nz-menu-item
-            nzMatchRouter
-            nz-tooltip
-            nzTooltipPlacement="right"
-            [nzTooltipTitle]="menu.title | translate"
-            (click)="linkClick()"
-          >
-            <a [routerLink]="[menu.url]" class="menu-item">
-              <i nz-icon [nzType]="menu.icon" [class]="menu.iconClass"></i>
-              <span translate>{{ menu.title }}</span>
-            </a>
-          </li>
-          <ng-template #nzsubmenutitle>
-            <i nz-icon [nzType]="menu.icon" [class]="menu.iconClass"></i>
-            <span translate>{{ menu.title }}</span>
-          </ng-template>
-        </ng-container>
-      </ul> -->
-    <!-- </nz-sider> -->
-    <nz-layout class="content">
-      <nz-breadcrumb
-        [nzSeparator]="'>'"
-        [nzAutoGenerate]="true"
-        [nzRouteLabelFn]="nzRouteLabelFn.bind(this)"
-      >
-        <nz-breadcrumb-item>
-          <a [routerLink]="['/home']">
-            <i nz-icon nzType="home"></i>
-          </a>
-        </nz-breadcrumb-item>
-      </nz-breadcrumb>
-      <nz-content>
-        <router-outlet></router-outlet>
-      </nz-content>
-    </nz-layout>
+    <nz-breadcrumb [nzSeparator]="'>'" [nzAutoGenerate]="true" [nzRouteLabelFn]="nzRouteLabelFn.bind(this)">
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/home']">
+          <i nz-icon nzType="home"></i>
+        </a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
   </nz-layout>
 </nz-layout>

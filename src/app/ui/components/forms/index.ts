@@ -2,6 +2,7 @@ import {
   ButtonComponent,
   CheckboxComponent,
   DateComponent,
+  EditableComponent,
   InputComponent,
   SelectComponent,
   SwitchComponent,
@@ -20,4 +21,5 @@ export const FORM_COMPONENTS: any[] = [
   CheckboxComponent,
   DateComponent,
   FormComponent,
+  EditableComponent,
 ];

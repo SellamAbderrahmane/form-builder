@@ -13,14 +13,14 @@ const routes: Routes = [
     },
   },
   {
-    path: 'form',
+    path: 'formbuilder',
     loadChildren: () =>
       import('./form/form.module').then((m) => m.FormModule),
     data: {
       breadcrumb: 'MENU.FORM',
     },
   },
-  { path: '', redirectTo: 'home', pathMatch: 'prefix' },
+  { path: '', redirectTo: 'formbuilder', pathMatch: 'prefix' },
 ];
 
 @NgModule({

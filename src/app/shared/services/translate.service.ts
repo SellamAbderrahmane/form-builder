@@ -9,6 +9,7 @@ export class TranslateService implements TranslateLoader {
 
   getTranslation(localId: string): Observable<any> {
     return new Observable((sub) => {
+      sub.next({})
       sub.complete();
       // this.http
       //   .fetch({

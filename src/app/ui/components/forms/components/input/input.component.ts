@@ -1,18 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { InputConfig } from './input.interface';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, OnChanges } from "@angular/core"
+import { FormControl } from "@angular/forms"
+import { InputConfig } from "./input.interface"
 
-import { merge } from 'lodash-es';
+import { merge } from "lodash-es"
 
 @Component({
-  selector: 'dms-input',
+  selector: "dms-input",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nz-input-group
@@ -39,8 +32,10 @@ import { merge } from 'lodash-es';
         [placeholder]="config.placeholder | translate"
         [formControl]="formControl"
         (ngModelChange)="(onChange)"
+        [attr.readonly]="config.readOnly"
         [autocomplete]="config.autocomplete"
         [attr.disabled]="config.disabled"
+        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
       />
 
       <textarea
@@ -49,52 +44,51 @@ import { merge } from 'lodash-es';
         [formControl]="formControl"
         (ngModelChange)="(onChange)"
         [attr.disabled]="config.disabled"
+        [attr.readonly]="config.readOnly"
         [placeholder]="config.placeholder | translate"
         [autocomplete]="config.autocomplete"
         *ngIf="config.type === 'textArea'"
+        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
       ></textarea>
     </ng-template>
 
     <ng-template #suffixTemplate>
-      <i
-        nz-icon
-        [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
-        class="p-icon"
-        (click)="passwordVisible = !passwordVisible"
-      ></i>
+      <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" class="p-icon" (click)="passwordVisible = !passwordVisible"></i>
     </ng-template>
   `,
 })
-export class InputComponent implements OnInit {
-  @Input() config: InputConfig = {};
-  @Input() formControl: FormControl = new FormControl();
+export class InputComponent implements OnInit, OnChanges {
+  @Input() config: InputConfig = {}
+  @Input() formControl: FormControl = new FormControl()
 
-  @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
 
-  passwordVisible: boolean = false;
+  passwordVisible: boolean = false
 
   constructor() {}
 
-  ngOnInit() {
+  ngOnChanges(): void {
     this.config = merge(
       {
-        name: 'default',
-        placeholder: '',
+        name: "default",
+        placeholder: "",
         group: false,
         disabled: false,
-        type: 'text',
+        type: "text",
         nzAutosize: true,
-        autocomplete: 'off',
+        autocomplete: "off",
       },
       this.config
-    );
+    )
+  }
 
+  ngOnInit() {
     if (this.config.value) {
-      this.formControl.setValue(this.config.value);
+      this.formControl.setValue(this.config.value)
     }
 
     if (this.config.disabled) {
-      this.formControl.disable();
+      this.formControl.disable()
     }
   }
 }

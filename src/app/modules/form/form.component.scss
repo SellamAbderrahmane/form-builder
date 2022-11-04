@@ -1,11 +1,84 @@
-@import 'variables';
+@import "variables";
+
+::ng-deep .ant-tabs {
+  min-height: 100%;
+
+  .ant-tabs-tabpane {
+    padding-right: 0 !important;
+  }
+}
 
 .module-layout {
   nz-content {
     background-color: $inner-layout-content-color;
+    padding: 1rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    > * {
+      padding: 1em;
+      border-radius: 5px;
+      box-shadow: $base-shadow;
+      background-color: $white-color;
+    }
+
+    .form-aria {
+      display: block;
+      flex: auto;
+    }
+  
+    .footer {
+      text-align: end;
+    }
   }
 
   nz-sider {
     border-left: 1px solid $border-color;
   }
+
+  .ant-menu {
+    border: none;
+
+    .ant-menu-item.field-item {
+      width: auto;
+      height: auto;
+      padding: 0.5em !important;
+      gap: 0.5em;
+      border-bottom: 1px solid $border-color;
+
+      div:nth-child(1) {
+        cursor: move;
+        padding: 0 1em;
+      }
+
+      div:nth-child(2) {
+        display: flex;
+        justify-content: center;
+
+        .field-icon {
+          position: relative;
+          border-radius: 5px;
+          padding: 0 0.8em;
+          background-color: $gray-color;
+          margin: 0 0.7em 0 0;
+        }
+      }
+    }
+  }
+
+  form-element:has(nz-row) {
+    display: block;
+    position: relative;
+    border: 0.5px solid #2196f3;
+  }
+
+  form-element:has(nz-row) + * {
+    border-top: none;
+  }
+}
+
+.style-sider {
+  padding: 1em;
+  box-shadow: $base-shadow;
 }

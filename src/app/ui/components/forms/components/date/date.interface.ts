@@ -6,7 +6,6 @@ export interface DateConfig extends FormItem {
   showTime?: boolean;
   disabledDate?(current: Date): boolean;
   format?: string;
-  inputReadOnly?: boolean;
   locale?: NzDatePickerI18nInterface;
   dateMode?: 'date' | 'week' | 'month' | 'year';
   popupStyle?: object;

@@ -1,57 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { ConfigService } from 'src/app/shared';
+import { Component, OnInit } from "@angular/core"
+import { cloneDeep } from "lodash-es"
+import { CdkDragDrop, CdkDragExit, copyArrayItem, transferArrayItem, moveItemInArray } from "@angular/cdk/drag-drop"
+
+import { ConfigService } from "src/app/shared"
+import { FormService } from "./services/form.service"
+import { v4 as uuid } from "uuid"
 
 @Component({
-  selector: 'app-form',
-  styleUrls: ['./form.component.scss'],
-  template: `
-    <nz-layout class="module-layout">
-      <nz-content> log </nz-content>
-      <nz-sider nzWidth="300px" [nzTheme]="config.state.theme"> </nz-sider>
-      <nz-sider
-        nzWidth="55px"
-        [nzCollapsed]="true"
-        [nzCollapsedWidth]="55"
-        [nzTheme]="config.state.theme"
-      >
-        <ul nz-menu nzMode="inline" nzMatchRouter [nzInlineCollapsed]="true">
-          <li nz-menu-item nzMatchRouter>
-            <a class="menu-item">
-              <i nz-icon [nzType]="'setting'"></i>
-              <span translate>{{ 'title' }}</span>
-            </a>
-            <!-- <a [routerLink]="[menu.url]" class="menu-item">
-              <i nz-icon [nzType]="menu.icon" [class]="menu.iconClass"></i>
-              <span translate>{{ menu.title }}</span>
-            </a> -->
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a class="menu-item">
-              <i nz-icon [nzType]="'setting'"></i>
-              <span translate>{{ 'title' }}</span>
-            </a>
-            <!-- <a [routerLink]="[menu.url]" class="menu-item">
-              <i nz-icon [nzType]="menu.icon" [class]="menu.iconClass"></i>
-              <span translate>{{ menu.title }}</span>
-            </a> -->
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a class="menu-item">
-              <i nz-icon [nzType]="'setting'"></i>
-              <span translate>{{ 'title' }}</span>
-            </a>
-            <!-- <a [routerLink]="[menu.url]" class="menu-item">
-              <i nz-icon [nzType]="menu.icon" [class]="menu.iconClass"></i>
-              <span translate>{{ menu.title }}</span>
-            </a> -->
-          </li>
-        </ul>
-      </nz-sider>
-    </nz-layout>
-  `,
+  selector: "app-form",
+  templateUrl: "form.component.html",
+  styleUrls: ["./form.component.scss"],
 })
 export class FormComponent implements OnInit {
-  constructor(public config: ConfigService) {}
+  constructor(public config: ConfigService, public service: FormService) {}
 
   ngOnInit() {}
+
+  droped(event: CdkDragDrop<any>) {
+    const { previousContainer, container, previousIndex, currentIndex, item } = event
+    item.data.formdata = this.service.onItemAdded(item.data)
+
+    if (previousContainer !== container) {
+      if (previousContainer.id === "source") {
+        if (item?.data?.type === "row" && container.id !== "formContainer") {
+          return
+        }
+
+        container.data.splice(currentIndex, 0, cloneDeep(item.data))
+        // copyArrayItem(previousContainer.data, container.data, previousIndex, currentIndex)
+      } else {
+        transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex)
+      }
+    }
+
+    // if (previousContainer.data) {
+    //   // remove(event.previousContainer.data, { temp: true });
+    // }
+  }
+
+  exited(event: CdkDragExit<any>, paramIndex: number) {
+    // const index = event.container.data.findIndex(
+    //   (el: any) => el.id === event.item.data.id
+    // );
+    // this.formParams[paramIndex].children.splice(index, 0, {
+    //   ...event.item.data,
+    //   temp: true,
+    // });
+  }
+
+  entered(event: any) {
+    // remove(event.item.data, { temp: true })
+  }
 }

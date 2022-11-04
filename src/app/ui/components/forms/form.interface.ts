@@ -2,9 +2,11 @@ import { TemplateRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import {
+  CheckboxComponent,
   CheckboxConfig,
   DateComponent,
   DateConfig,
+  EditableComponent,
   InputComponent,
   InputConfig,
   SelectComponent,
@@ -53,6 +55,7 @@ export interface FormItem {
   autoFocus?: boolean;
   borderless?: boolean;
   allowClear?: boolean;
+  readOnly?: boolean;
   loading?: boolean;
   placeholder?: string;
   suffix?: string | TemplateRef<any>;
@@ -77,10 +80,11 @@ export const WRAPPERS: { [T: string]: any } = {
   text: InputComponent,
   number: InputComponent,
   date: DateComponent,
+  datetime: DateComponent,
   password: InputComponent,
   phone: InputComponent,
-  // checkbox: CheckboxComponent,
-  checkbox: SwitchComponent,
+  editable: EditableComponent,
+  checkbox: CheckboxComponent,
   select: SelectComponent,
   switch: SwitchComponent,
   // radio: FormInputComponent
