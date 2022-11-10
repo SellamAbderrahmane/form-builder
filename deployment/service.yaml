@@ -5,11 +5,10 @@ metadata:
   labels:
     app: form
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: form
   ports:
     - protocol: TCP
       name: http
-      port: 3000
-      targetPort: 80
+      port: 80

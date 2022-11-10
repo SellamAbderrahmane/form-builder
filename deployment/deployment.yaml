@@ -22,8 +22,8 @@ spec:
     spec:
       containers:
         - name: form
-          image: abderrahmanesellam/form:v1
-          imagePullPolicy: Never
+          image: abderrahmanesellam/formbuilder-c:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:
@@ -32,4 +32,4 @@ spec:
               cpu: "10m"
             limits:
               memory: "256Mi"
-              cpu: "500m"
+              cpu: "250m"
