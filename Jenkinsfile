@@ -23,7 +23,7 @@
 //     // }
 //   }
 // }
-node('jenkins-slave') {
+node(POD_LABEL) {
   stage('Build') {
     sh 'echo hello world'
   }
