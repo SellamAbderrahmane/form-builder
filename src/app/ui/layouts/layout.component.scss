@@ -19,6 +19,20 @@
     background: white;
     padding: 0.7em 1.7em;
   }
+
+  .menu-sidebar {
+    position: absolute;
+    z-index: 999;
+    box-shadow: 1px 2px 5px #e7f1f5;
+  
+    &.ant-layout-sider-collapsed {
+      @media (max-width: 528px) {
+        width: 0 !important;
+        flex: 0 0 0 !important;
+        min-width: 0 !important;
+      }
+    }
+  }
 }
 
 // .content {
@@ -51,19 +65,6 @@
   width: inherit;
 }
 
-.menu-sidebar {
-  position: relative;
-  z-index: 999;
-  box-shadow: 1px 2px 5px #e7f1f5;
-
-  &.ant-layout-sider-collapsed {
-    @media (max-width: 528px) {
-      width: 0 !important;
-      flex: 0 0 0 !important;
-      min-width: 0 !important;
-    }
-  }
-}
 
 .ant-menu-inline,
 .ant-menu-vertical,

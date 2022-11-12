@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 // import { AuthService } from 'src/app/auth/services/auth.service';
@@ -27,21 +27,6 @@ export class LayoutComponent implements OnInit {
     // });
   }
 
-  fullScreen() {
-    let elem = document.documentElement as HTMLElement & {
-      mozRequestFullScreen(): Promise<void>;
-      webkitRequestFullScreen(): Promise<void>;
-      msRequestFullScreen(): Promise<void>;
-    };
-
-    let methodToBeInvoked =
-      elem.requestFullscreen ||
-      elem.webkitRequestFullScreen ||
-      elem['mozRequestFullscreen'] ||
-      elem['msRequestFullscreen'];
-    if (methodToBeInvoked) methodToBeInvoked.call(elem);
-  }
-
   nzRouteLabelFn(label: string) {
     if (!label) return label;
 
@@ -49,8 +34,8 @@ export class LayoutComponent implements OnInit {
   }
 
   linkClick() {
-    if (window.innerWidth <= 898) {
+    // if (window.innerWidth <= 898) {
       this.isCollapsed = !this.isCollapsed;
-    }
+    // }
   }
 }

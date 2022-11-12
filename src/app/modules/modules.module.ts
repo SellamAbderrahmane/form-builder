@@ -9,7 +9,7 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     data: {
-      breadcrumb: 'MENU.HOME',
+      breadcrumb: 'Home',
     },
   },
   {
@@ -17,10 +17,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./form/form.module').then((m) => m.FormModule),
     data: {
-      breadcrumb: 'MENU.FORM',
+      breadcrumb: 'Form builder',
     },
   },
-  { path: '', redirectTo: 'formbuilder', pathMatch: 'prefix' },
+  { path: '', redirectTo: 'home', pathMatch: 'prefix' },
 ];
 
 @NgModule({

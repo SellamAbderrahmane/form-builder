@@ -1,29 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: form-deploy
+  name: fbc-deploy
+  namespace: form-builder
   labels:
-    app: form
-  annotations:
+    app: fb-client
 spec:
   selector:
     matchLabels:
-      app: form
+      app: fb-client
   replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   template:
     metadata:
       labels:
-        app: form
+        app: fb-client
     spec:
       containers:
-        - name: form
+        - name: formbuilder-client
           image: abderrahmanesellam/formbuilder-c:v1
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           resources:

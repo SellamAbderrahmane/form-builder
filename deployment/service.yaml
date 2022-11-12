@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: form-service
+  name: fbc-service
+  namespace: form-builder
   labels:
-    app: form
+    app: fb-client
 spec:
   type: LoadBalancer
   selector:
-    app: form
+    app: fb-client
   ports:
     - protocol: TCP
       name: http
