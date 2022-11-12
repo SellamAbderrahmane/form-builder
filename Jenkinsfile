@@ -30,7 +30,7 @@
 // }
 
 podTemplate {
-    node(POD_LABEL) {
+    node('jenkins-slave') {
         stage('Run shell') {
             sh 'echo hello world'
         }
