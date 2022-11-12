@@ -23,16 +23,16 @@
 //     // }
 //   }
 // }
-// node('jenkins-slave') {
-//   stage('Build') {
-//     sh 'echo hello world'
-//   }
-// }
-
-podTemplate {
-    node('jenkins-slave') {
-        stage('Run shell') {
-            sh 'echo hello world'
-        }
-    }
+node('jenkins-slave') {
+  stage('Build') {
+    sh 'echo hello world'
+  }
 }
+
+// podTemplate {
+//     node('jenkins-slave') {
+//         stage('Run shell') {
+//             sh 'echo hello world'
+//         }
+//     }
+// }
