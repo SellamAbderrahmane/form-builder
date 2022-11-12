@@ -23,16 +23,16 @@
 //     // }
 //   }
 // }
-node(POD_LABEL) {
-  stage('Build') {
-    sh 'echo hello world'
-  }
-}
-
-// podTemplate {
-//     node('jenkins-slave') {
-//         stage('Run shell') {
-//             sh 'echo hello world'
-//         }
-//     }
+// node(POD_LABEL) {
+//   stage('Build') {
+//     sh 'echo hello world'
+//   }
 // }
+
+podTemplate {
+    node(POD_LABEL) {
+        stage('Run shell') {
+            sh 'echo hello world'
+        }
+    }
+}
