@@ -7,11 +7,11 @@ import { ConfigService } from 'src/app/shared';
 export class CreatebyPipe implements PipeTransform {
   constructor(private config: ConfigService) {}
 
-  transform(createdBy: any): boolean {
-    if (!this.config.state?.currentUser) {
+  transform(createdBy: any, currentUser: any): boolean {
+    if (!currentUser) {
       return false;
     }
 
-    return this.config.state.currentUser.id === createdBy._id;
+    return currentUser.id === createdBy._id;
   }
 }

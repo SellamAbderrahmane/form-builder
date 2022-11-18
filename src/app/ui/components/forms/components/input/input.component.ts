@@ -19,41 +19,46 @@ import { merge } from "lodash-es"
       [nzCompact]="config.compact"
       *ngIf="config.group; else inputtemp"
     >
+      <ng-template #suffixTemplate>
+        <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" class="p-icon" (click)="passwordVisible = !passwordVisible"></i>
+      </ng-template>
       <ng-template [ngTemplateOutlet]="inputtemp"></ng-template>
     </nz-input-group>
 
-    <ng-template #inputtemp>
+    <ng-template #inputtemp [ngSwitch]="config.type">
+      <nz-input-number
+        *ngSwitchCase="'number-input'"
+        [formControl]="formControl"
+        (ngModelChange)="(onChange)"
+        [nzParser]="config.parser"
+      ></nz-input-number>
+      <textarea
+        nz-input
+        *ngSwitchCase="'textArea'"
+        [nzAutosize]="config.autosize"
+        [formControl]="formControl"
+        (ngModelChange)="(onChange)"
+        [attr.disabled]="config.disabled"
+        [attr.readonly]="config.readOnly ? true : null"
+        [placeholder]="config.placeholder | translate"
+        [autocomplete]="config.autocomplete"
+        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+      ></textarea>
       <input
         nz-input
-        *ngIf="config.type !== 'textArea'"
+        *ngSwitchDefault
         [nzSize]="config.size"
         [type]="passwordVisible ? 'text' : config.type"
         [name]="config.name"
         [placeholder]="config.placeholder | translate"
         [formControl]="formControl"
         (ngModelChange)="(onChange)"
-        [attr.readonly]="config.readOnly"
+        [pattern]="config.pattern"
         [autocomplete]="config.autocomplete"
+        [attr.readonly]="config.readOnly ? true : null"
         [attr.disabled]="config.disabled"
         [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
       />
-
-      <textarea
-        nz-input
-        [nzAutosize]="config.autosize"
-        [formControl]="formControl"
-        (ngModelChange)="(onChange)"
-        [attr.disabled]="config.disabled"
-        [attr.readonly]="config.readOnly"
-        [placeholder]="config.placeholder | translate"
-        [autocomplete]="config.autocomplete"
-        *ngIf="config.type === 'textArea'"
-        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
-      ></textarea>
-    </ng-template>
-
-    <ng-template #suffixTemplate>
-      <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" class="p-icon" (click)="passwordVisible = !passwordVisible"></i>
     </ng-template>
   `,
 })

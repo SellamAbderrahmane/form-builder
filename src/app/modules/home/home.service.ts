@@ -1,20 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core"
 
-import { Store } from 'src/app/state';
-import { HomeState, SHome } from './home.state';
-import { HttpService, Status, Tools } from 'src/app/shared';
+import { HomeState, SHome } from "./home.state"
+import { HttpService, Status, Tools } from "src/app/shared"
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class HomeService extends Tools {
-  constructor(
-    private http: HttpService,
-    private store: Store<SHome>
-  ) {
-    super();
+  constructor(private http: HttpService) {
+    super()
   }
-
-  get state(): HomeState {
-    return this.store.state;
-  }
-
 }

@@ -1,16 +1,19 @@
-import { ComponentRef, Directive, SimpleChanges, Input, OnChanges, OnDestroy, OnInit, ViewContainerRef } from "@angular/core"
+import { ComponentRef, Directive, SimpleChanges, EventEmitter,Input, OnChanges, OnDestroy, OnInit, ViewContainerRef } from "@angular/core"
 import { WRAPPERS } from "src/app/ui/components"
 
 @Directive({ selector: "[form-element]" })
 export class FormElementDirective implements OnInit, OnDestroy, OnChanges {
   @Input() style: any
   @Input() config: any
+  @Input() previewMode: any
+
   compRef: ComponentRef<any>
+  reversePreviewModeTypes = ['editable'];
 
   constructor(private viewContainerRef: ViewContainerRef) {}
 
-  ngOnChanges({ config, style }: SimpleChanges): void {
-    if (style) this.reloadComponent()
+  ngOnChanges({ config, style, previewMode }: SimpleChanges): void {
+    if (style || previewMode) this.reloadComponent()
     else if (config) {
       const { currentValue, previousValue } = config
 
@@ -25,6 +28,11 @@ export class FormElementDirective implements OnInit, OnDestroy, OnChanges {
 
   reloadComponent() {
     if (!this.compRef) return
+    // if(this.reversePreviewModeTypes.includes(this.config.type) && this.previewMode) {
+    //   this.config.readOnly = this.previewMode
+    // } else {
+    //   this.config.readOnly = !this.previewMode
+    // }
 
     this.compRef.setInput("config", this.config)
 

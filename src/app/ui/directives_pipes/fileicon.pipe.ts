@@ -8,9 +8,9 @@ import { fileicons } from '../components';
 export class FileIconPipe implements PipeTransform {
   constructor(private config: ConfigService) {}
 
-  transform(value: any, ...args: any[]): any {
+  transform(value: any, host: string): any {
     return (
-      this.config.state.host + (fileicons[value] || 'public/images/file.svg')
+      host + (fileicons[value] || 'public/images/file.svg')
     );
   }
 }

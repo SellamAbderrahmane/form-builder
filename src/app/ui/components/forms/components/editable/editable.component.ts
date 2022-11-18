@@ -8,7 +8,7 @@ import { merge } from "lodash-es"
   selector: "dms-editable",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div contenteditable class="contenteditable" [attr.readonly]="config.readOnly" [ngStyle]="style">
+    <div [attr.contenteditable]="!config.readOnly ?? true" class="contenteditable" [ngStyle]="style">
       {{ config?.value }}
     </div>
   `,
@@ -38,8 +38,6 @@ export class EditableComponent implements OnInit {
       },
       this.config
     )
-
-    this.style = merge({ "pointer-events": this.config.readOnly ? "none" : "auto" }, this.style)
 
     if (this.config.value) {
       this.formControl.setValue(this.config.value)

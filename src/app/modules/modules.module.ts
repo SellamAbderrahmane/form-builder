@@ -1,42 +1,31 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { UiModule } from '../ui/ui.module';
-import { HomeComponent } from './home/home.component';
-import { HomeService } from './home/home.service';
+import { NgModule } from "@angular/core"
+import { RouterModule, Routes } from "@angular/router"
+
+import { UiModule } from "../ui/ui.module"
+import { HomeService } from "./home/home.service"
+import { HomeComponent } from "./home/home.component"
 
 const routes: Routes = [
   {
-    path: 'home',
+    path: "home",
     component: HomeComponent,
     data: {
-      breadcrumb: 'Home',
+      breadcrumb: "Home",
     },
   },
   {
-    path: 'formbuilder',
-    loadChildren: () =>
-      import('./form/form.module').then((m) => m.FormModule),
+    path: "formbuilder",
+    loadChildren: () => import("./form/form.module").then((m) => m.FormModule),
     data: {
-      breadcrumb: 'Form builder',
+      breadcrumb: "Form builder",
     },
   },
-  { path: '', redirectTo: 'home', pathMatch: 'prefix' },
-];
+  { path: "", redirectTo: "home", pathMatch: "prefix" },
+]
 
 @NgModule({
-  imports: [
-    UiModule,
-    RouterModule.forChild(routes),
-    // StateModule.forChild<HomeState>({
-    //   selector: 'home',
-    //   state: {
-    //     pagination: {}
-    //   },
-    // }),
-  ],
+  imports: [UiModule, RouterModule.forChild(routes)],
   declarations: [HomeComponent],
   providers: [HomeService],
 })
-export class AppModulesModule {
-  constructor() {}
-}
+export class AppModulesModule {}

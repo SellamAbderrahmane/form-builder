@@ -33,6 +33,7 @@ export declare type INPUTS =
   | 'select'
   | 'textArea'
   | 'date'
+  | 'editable'
   | 'switch';
 
 export type FormField = FormItem &

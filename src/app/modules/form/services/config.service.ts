@@ -1,13 +1,20 @@
 import { Injectable } from "@angular/core"
 import { keyBy, mapValues } from "lodash-es"
 
+import { FormState } from "../form.state"
 import { HttpService } from "src/app/shared"
-import { FormState, FORM_ELEM_PARAM } from "../form.state"
-import { StateConfig, Store } from "src/app/state"
+import { Store, StoreService } from "src/app/store"
+import { APPCONFIG } from "src/app/shared/config"
 
 @Injectable()
 export class FormConfigService {
-  constructor(private http: HttpService, private store: Store<StateConfig<FormState>>) {}
+  gconfig: APPCONFIG
+
+  constructor(private http: HttpService, private store: Store<FormState>, public storeService: StoreService) {
+    storeService.select("config").subscribe((c) => {
+      this.gconfig = c
+    })
+  }
 
   async init() {
     this.store.setState({
@@ -43,12 +50,7 @@ export class FormConfigService {
                 type: "column",
                 name: "1 Column",
                 class: "input",
-                icon: "font-size",
                 children: [],
-                style: {
-                  border: "1px solid red",
-                  cursor: "pointer",
-                },
               },
             ],
           },
@@ -64,23 +66,13 @@ export class FormConfigService {
                 type: "column",
                 name: "Column 1",
                 class: "input",
-                icon: "font-size",
                 children: [],
-                style: {
-                  border: "1px solid red",
-                  cursor: "pointer",
-                },
               },
               {
                 type: "column",
                 name: "Column 2",
                 class: "input",
-                icon: "font-size",
                 children: [],
-                style: {
-                  border: "1px solid red",
-                  cursor: "pointer",
-                },
               },
             ],
           },
@@ -96,34 +88,53 @@ export class FormConfigService {
                 type: "column",
                 name: "Column 1",
                 class: "input",
-                icon: "font-size",
                 children: [],
-                style: {
-                  border: "1px solid red",
-                  cursor: "pointer",
-                },
               },
               {
                 type: "column",
                 name: "Column 2",
                 class: "input",
-                icon: "font-size",
                 children: [],
-                style: {
-                  border: "1px solid red",
-                  cursor: "pointer",
-                },
               },
               {
                 type: "column",
                 name: "Column 3",
                 class: "input",
-                icon: "font-size",
                 children: [],
-                style: {
-                  border: "1px solid red",
-                  cursor: "pointer",
-                },
+              },
+            ],
+          },
+          {
+            type: "row",
+            menuConfig: {
+              class: "input",
+              name: "4 Column",
+              icon: "font-size",
+            },
+            children: [
+              {
+                type: "column",
+                name: "Column 1",
+                class: "input",
+                children: [],
+              },
+              {
+                type: "column",
+                name: "Column 2",
+                class: "input",
+                children: [],
+              },
+              {
+                type: "column",
+                name: "Column 3",
+                class: "input",
+                children: [],
+              },
+              {
+                type: "column",
+                name: "Column 4",
+                class: "input",
+                children: [],
               },
             ],
           },
@@ -134,7 +145,6 @@ export class FormConfigService {
         children: [
           {
             type: "editable",
-            value: "Untitled",
             menuConfig: {
               name: "Text",
               icon: "font-size",
@@ -149,10 +159,6 @@ export class FormConfigService {
             menuConfig: {
               name: "Text field",
               icon: "font-size",
-            },
-            style: {
-              border: "1px solid red",
-              cursor: "pointer",
             },
           },
           {
@@ -255,19 +261,29 @@ export class FormConfigService {
           },
         },
         style: {
-          textAlign: {
+          "text-align": {
             span: 24,
             group: true,
-            key: "textAlign",
+            key: "text-align",
             type: "select",
             label: "Text Align",
             value: "left",
             placeholder: "Text Align",
             options: [
-              { label: "Center", value: "center" },
               { label: "Left", value: "left" },
+              { label: "Center", value: "center" },
               { label: "Right", value: "right" },
             ],
+          },
+          "font-size": {
+            span: 24,
+            group: true,
+            key: "font-size",
+            type: "text",
+            value: "15px",
+            label: "Font size",
+            pattern: "^[0-9]*(s)?{rem|px|em}$",
+            placeholder: "Font size",
           },
         },
       },
@@ -298,12 +314,12 @@ export class FormConfigService {
       case "number":
         const param = {
           fields: Object.values(formElementParams.input.param),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.param)), (k) => formElementParams.input.param[k]?.value)
+          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.param)), (k) => formElementParams.input.param[k]?.value),
         }
 
         const style = {
           fields: Object.values(formElementParams.input.style),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.style)), (k) => formElementParams.input.style[k]?.value)
+          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.style)), (k) => formElementParams.input.style[k]?.value),
         }
 
         return { param, style }
@@ -323,12 +339,12 @@ export class FormConfigService {
 
         const param = {
           fields: Object.values(formElementParams[type].param),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].param)), (k) => formElementParams[type].param[k]?.value)
+          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].param)), (k) => formElementParams[type].param[k]?.value),
         }
 
         const style = {
           fields: Object.values(formElementParams[type].style),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].style)), (k) => formElementParams[type].style[k]?.value)
+          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].style)), (k) => formElementParams[type].style[k]?.value),
         }
 
         return { param, style }

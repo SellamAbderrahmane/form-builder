@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 // import { AuthService } from 'src/app/auth/services/auth.service';
 import { ConfigService } from 'src/app/shared';
+import { APPCONFIG } from 'src/app/shared/config';
+import { Store } from 'src/app/store';
 
 @Component({
   selector: 'app-layout',
@@ -13,7 +15,7 @@ export class LayoutComponent implements OnInit {
   isCollapsed = true;
 
   constructor(
-    public config: ConfigService,
+    public config: Store<APPCONFIG>,
     // public authService: AuthService,
     private translate: TranslateService,
     private router: Router

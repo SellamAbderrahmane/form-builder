@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { StateService } from 'src/app/state';
 import { ConfigService } from './config.service';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
-  constructor(private state: StateService) {}
+  constructor() {}
 
   get canRead(): boolean {
 

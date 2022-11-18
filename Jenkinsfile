@@ -31,8 +31,16 @@
 
 podTemplate {
     node(POD_LABEL) {
-        stage('Run shell') {
-            sh 'echo hello world'
-        }
+      stage('Build') {
+        sh 'echo hello world'
+      }
+
+      stage('Test') {
+        sh 'echo hello world'
+      }
+
+      stage('Deploy') {
+        sh 'echo hello world'
+      }
     }
 }

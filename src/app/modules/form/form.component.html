@@ -1,5 +1,5 @@
 <nz-layout class="module-layout">
-  <nz-sider class="style-sider" nzWidth="300px" [nzTheme]="config.state.theme" *ngIf="service.paramForm">
+  <nz-sider class="style-sider" nzWidth="300px" [nzTheme]="config.gconfig.theme" *ngIf="service.selectedElement">
     <dms-form [fields]="service.paramFormFields" [formGroup]="service.paramForm" [showFooter]="false"> </dms-form>
     <dms-form [fields]="service.styleFormFields" [formGroup]="service.styleForm" [showFooter]="false"> </dms-form>
   </nz-sider>
@@ -17,10 +17,11 @@
       <ng-container *ngFor="let field of service.state.formData?.children; let i = index">
         <form-element
           [element]="field"
-          [parent]="service.state.formData"
           [elementIndex]="i"
-          [config]="field.formparam?.formgroup?.value"
+          [parent]="service.state.formData"
+          [previewMode]="previewMode.value"
           [style]="field.formstyle?.formgroup?.value"
+          [config]="field.formparam?.formgroup?.value"
           (droped)="droped($event)"
           (ondelete)="ondelete($event)"
           (onselect)="onselect($event)"
@@ -28,10 +29,11 @@
       </ng-container>
     </form>
     <div class="footer">
+      <label nz-checkbox [formControl]="previewMode">Preview mode</label>
       <button nz-button nzType="primary" (click)="service.onSubmit()">Submit</button>
     </div>
   </nz-content>
-  <nz-sider nzWidth="360px" [nzTheme]="config.state.theme">
+  <nz-sider nzWidth="360px" [nzTheme]="config.gconfig.theme">
     <nz-tabset nzSize="large" nzTabPosition="right">
       <nz-tab
         id="source"

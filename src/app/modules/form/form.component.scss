@@ -29,7 +29,10 @@
     }
   
     .footer {
-      text-align: end;
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
@@ -67,13 +70,13 @@
     }
   }
 
-  form-element:has(nz-row) {
+  form-element:has(nz-row.section-row) {
     display: block;
     position: relative;
     border: 0.5px solid #2196f3;
   }
 
-  form-element:has(nz-row) + * {
+  form-element:has(nz-row.section-row) + * {
     border-top: none;
   }
 }

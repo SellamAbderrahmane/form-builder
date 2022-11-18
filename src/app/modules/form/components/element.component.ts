@@ -1,11 +1,12 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, OnDestroy } from "@angular/core"
 import { isNil, merge, pickBy } from "lodash-es"
+import { v4 } from "uuid"
 
 @Component({
   selector: "form-element",
   template: `
     <ng-container [ngSwitch]="element.type">
-      <nz-row class="section-row" *ngSwitchCase="'row'" cdkDrag cdkDragDisabled>
+      <nz-row [ngClass]="{ 'section-row': !previewMode }" *ngSwitchCase="'row'" cdkDrag cdkDragDisabled>
         <nz-col
           cdkDropList
           dragAndDropManager
@@ -19,13 +20,14 @@ import { isNil, merge, pickBy } from "lodash-es"
             [parent]="col"
             [element]="colEl"
             [elementIndex]="colIdx"
+            [previewMode]="previewMode"
             [config]="colEl.formparam?.formgroup?.value"
             [style]="colEl.formstyle?.formgroup?.value"
             (ondelete)="deleteChild($event)"
             (onselect)="onselect.emit($event)"
           ></form-element>
         </nz-col>
-        <div class="row-controls">
+        <div class="row-controls" *ngIf="!previewMode">
           <button nz-button nzSize="small" nzDanger nzShape="circle" (click)="deleteElement()">
             <i nz-icon nzType="delete"></i>
           </button>
@@ -38,13 +40,13 @@ import { isNil, merge, pickBy } from "lodash-es"
         id="elementContainer"
         [cdkDragData]="element"
         (click)="containerClick()"
-        [ngClass]="{ 'active-container': showControls }"
+        [ngClass]="{ 'active-container': showControls && !previewMode }"
       >
         <nz-form-label *ngIf="elementconfig.label && elementconfig.type !== 'checkbox'" [nzRequired]="elementconfig.required" [nzFor]="element.key">
           <span>{{ elementconfig.label }}</span>
         </nz-form-label>
         <nz-form-control readonly [nzExtra]="elementconfig.description">
-          <ng-template form-element ngDefaultControl [config]="elementconfig" [style]="style"></ng-template>
+          <ng-template form-element ngDefaultControl [config]="elementconfig" [style]="style" [previewMode]="previewMode"></ng-template>
         </nz-form-control>
 
         <div class="element-controls" *ngIf="showControls">
@@ -88,17 +90,6 @@ import { isNil, merge, pickBy } from "lodash-es"
         padding: 0 0.5em;
       }
 
-      .row-controls {
-        position: absolute;
-        top: 0;
-        transform: translate(0, -50%);
-        left: 0.5em;
-        display: flex;
-        gap: 4px;
-        background: white;
-        padding: 0 0.5em;
-      }
-
       .section-row {
         position: relative;
         flex: auto;
@@ -111,17 +102,30 @@ import { isNil, merge, pickBy } from "lodash-es"
       .section-row > nz-col + nz-col {
         border-left: 0.5px solid #2196f3;
       }
+
+      .section-row .row-controls {
+        position: absolute;
+        top: 0;
+        transform: translate(0, -50%);
+        left: 0.5em;
+        display: flex;
+        gap: 4px;
+        background: white;
+        padding: 0 0.5em;
+      }
     `,
   ],
 })
 export class FormElementComponent implements OnInit, OnDestroy {
-  @Input() element: any
-  @Input() parent: any
-  @Input() elementIndex: number
   @Input() style: any
+  @Input() parent: any
+  @Input() element: any
+  @Input() elementIndex: number
+  @Input() previewMode: boolean
+
   @Input() set config(v: any) {
     const value = pickBy(v, (v) => !isNil(v))
-    this.elementconfig = merge({ type: this.element.type, value: this.element.value, readOnly: true }, value)
+    this.elementconfig = merge({ type: this.element.type, readOnly: this.previewMode }, value)
   }
 
   @Output() droped: EventEmitter<any> = new EventEmitter()
@@ -138,6 +142,12 @@ export class FormElementComponent implements OnInit, OnDestroy {
   ngOnInit() {}
 
   containerClick() {
+    if (this.previewMode) {
+      this.showControls = false
+      this.onselect.emit(null)
+      return
+    }
+
     this.showControls = true
     this.onselect.emit(this.element)
   }

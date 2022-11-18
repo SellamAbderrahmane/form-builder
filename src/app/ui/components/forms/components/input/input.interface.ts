@@ -6,7 +6,9 @@ export interface InputConfig extends FormItem {
   compact?: boolean;
   prefix?: string | TemplateRef<void>;
   suffixIcon?: string;
+  pattern?: string;
   autocomplete?: 'off' | 'on';
   autosize?: boolean | { minRows: number; maxRows: number };
   size?: 'large' | 'small' | 'default';
+  parser?(value: any): any;
 }

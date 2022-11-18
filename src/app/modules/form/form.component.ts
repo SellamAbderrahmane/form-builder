@@ -4,6 +4,10 @@ import { CdkDragDrop, CdkDragExit, copyArrayItem, transferArrayItem, moveItemInA
 
 import { ConfigService } from "src/app/shared"
 import { FormService } from "./services/form.service"
+import { FormControl } from "@angular/forms"
+import { APPCONFIG } from "src/app/shared/config"
+import { StoreService } from "src/app/store"
+import { FormConfigService } from "./services/config.service"
 
 @Component({
   selector: "app-form",
@@ -11,7 +15,11 @@ import { FormService } from "./services/form.service"
   styleUrls: ["./form.component.scss"],
 })
 export class FormComponent implements OnInit {
-  constructor(public config: ConfigService, public service: FormService) {}
+  previewMode = new FormControl(false)
+
+  constructor(public config: FormConfigService, public service: FormService) {
+
+  }
 
   ngOnInit() {}
 
@@ -33,6 +41,8 @@ export class FormComponent implements OnInit {
       } else {
         transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex)
       }
+    } else {
+      moveItemInArray(container.data, previousIndex, currentIndex)
     }
 
     // if (previousContainer.data) {

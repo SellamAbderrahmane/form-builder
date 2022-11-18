@@ -1,86 +1,66 @@
 import { Injectable } from "@angular/core"
-import { TranslateService } from "@ngx-translate/core"
+import { Observable } from "rxjs"
 
-import { Status } from "../utils"
 import { APPCONFIG } from "../config"
+import { Store } from "src/app/store"
 import { HttpService } from "./http.service"
-import { StateConfig, Store } from "src/app/state"
-import { RULE } from "../ability/ability.interface"
-import { AbilityService } from "../ability/ability.service"
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class ConfigService {
   error: boolean = false
-  constructor(
-    private ability: AbilityService,
-    private http: HttpService,
-    private translate: TranslateService,
-    private store: Store<StateConfig<APPCONFIG>>
-  ) {
-    // navigator.permissions
-    //   .query({ name: 'notifications' })
-    //   .then((permission) => {
-    //     permission.onchange = event=> {
-    //      console.log(event);
-    //     }
-    //     console.log(permission);
-    //   });
-  }
 
-  get state(): APPCONFIG {
-    return this.store.state
-  }
+  constructor(private http: HttpService, private store: Store<APPCONFIG>) {}
 
   async init() {
     console.log("APP_INITIALIZER:: " + Date.now())
+
     // const user = await this.loadLoggedInUser();
     const menus = await this.loadUserMenus()
 
     this.store.setState({
+      loading: false,
       menus,
     })
-    return Promise.resolve(this.state)
+    return
   }
 
-  async loadLoggedInUser() {
-    // try {
-    //   const verify: any = await this.http.fetch({
-    //     url: '/user/verify-user',
-    //     method: 'GET',
-    //   });
-    //   if (verify.status === Status.SUCCESS) {
-    //     this.store.setState({
-    //       loading: false,
-    //       accessToken: verify.token,
-    //       lang: verify.user?.lang,
-    //       currentUser: {
-    //         id: verify.user?._id,
-    //         name: verify.user?.name,
-    //         role: verify.user?.role,
-    //         image: verify.user?.image,
-    //         email: verify.user?.email,
-    //         phone: verify.user?.phone,
-    //       },
-    //     });
-    //     const permissions: RULE[] = verify.user?.role?.permissions.map(
-    //       (item: any) => ({
-    //         type: item.category,
-    //         able: item.key,
-    //       })
-    //     );
-    //     this.ability.update(permissions);
-    //     this.subscribeToNotifications(verify.user?._id);
-    //     await this.loadUserMenus();
-    //   }
-    // } catch (err) {
-    //   this.store.setState({
-    //     currentUser: null,
-    //     loading: false,
-    //   });
-    // }
-  }
+  // async loadLoggedInUser() {
+  //   // try {
+  //   //   const verify: any = await this.http.fetch({
+  //   //     url: '/user/verify-user',
+  //   //     method: 'GET',
+  //   //   });
+  //   //   if (verify.status === Status.SUCCESS) {
+  //   //     this.store.setState({
+  //   //       loading: false,
+  //   //       accessToken: verify.token,
+  //   //       lang: verify.user?.lang,
+  //   //       currentUser: {
+  //   //         id: verify.user?._id,
+  //   //         name: verify.user?.name,
+  //   //         role: verify.user?.role,
+  //   //         image: verify.user?.image,
+  //   //         email: verify.user?.email,
+  //   //         phone: verify.user?.phone,
+  //   //       },
+  //   //     });
+  //   //     const permissions: RULE[] = verify.user?.role?.permissions.map(
+  //   //       (item: any) => ({
+  //   //         type: item.category,
+  //   //         able: item.key,
+  //   //       })
+  //   //     );
+  //   //     this.ability.update(permissions);
+  //   //     this.subscribeToNotifications(verify.user?._id);
+  //   //     await this.loadUserMenus();
+  //   //   }
+  //   // } catch (err) {
+  //   //   this.store.setState({
+  //   //     currentUser: null,
+  //   //     loading: false,
+  //   //   });
+  //   // }
+  // }
 
   async loadUserMenus() {
     return [
@@ -110,44 +90,44 @@ export class ConfigService {
     // }
   }
 
-  async removeToken() {
-    this.store.setState({
-      accessToken: null,
-    })
-  }
+  // async removeToken() {
+  //   this.store.setState({
+  //     accessToken: null,
+  //   })
+  // }
 
-  useLanguage(language: string): void {
-    this.translate.use(language)
-    this.store.setState({
-      lang: language,
-    })
-  }
+  // useLanguage(language: string): void {
+  //   this.translate.use(language)
+  //   this.store.setState({
+  //     lang: language,
+  //   })
+  // }
 
-  subscribeToNotifications(user: any) {
-    // if (!this.swPush.isEnabled) {
-    //   console.log('Notification is not enabled.');
-    //   return;
-    // }
-    // this.swPush
-    //   .requestSubscription({
-    //     serverPublicKey: environment.vapidID,
-    //   })
-    //   .then(async (subscriber) => {
-    //     this.store.setState({
-    //       subscriber: subscriber,
-    //     });
-    //     const rep = await this.http.fetch({
-    //       method: 'POST',
-    //       url: 'notification/subscriber',
-    //       data: {
-    //         user,
-    //         subscriber,
-    //       },
-    //     });
-    //     // console.log(rep);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  }
+  // subscribeToNotifications(user: any) {
+  //   // if (!this.swPush.isEnabled) {
+  //   //   console.log('Notification is not enabled.');
+  //   //   return;
+  //   // }
+  //   // this.swPush
+  //   //   .requestSubscription({
+  //   //     serverPublicKey: environment.vapidID,
+  //   //   })
+  //   //   .then(async (subscriber) => {
+  //   //     this.store.setState({
+  //   //       subscriber: subscriber,
+  //   //     });
+  //   //     const rep = await this.http.fetch({
+  //   //       method: 'POST',
+  //   //       url: 'notification/subscriber',
+  //   //       data: {
+  //   //         user,
+  //   //         subscriber,
+  //   //       },
+  //   //     });
+  //   //     // console.log(rep);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.log(error);
+  //   //   });
+  // }
 }

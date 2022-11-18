@@ -1,20 +1,22 @@
 import { Injectable } from "@angular/core"
 import { FormBuilder, FormGroup } from "@angular/forms"
-import { StateConfig, Store } from "src/app/state"
+import { Store } from "src/app/store"
 
-import { FormField } from "src/app/ui/components"
 import { FormState } from "../form.state"
+import { FormField } from "src/app/ui/components"
 import { FormConfigService } from "./config.service"
 
 @Injectable({ providedIn: "root" })
 export class FormService {
+  selectedElement: any
+
   paramForm: FormGroup
   paramFormFields: FormField[]
 
   styleForm: FormGroup
   styleFormFields: FormField[]
 
-  constructor(private fb: FormBuilder, private formconfig: FormConfigService, private store: Store<StateConfig<FormState>>) {}
+  constructor(private fb: FormBuilder, private formconfig: FormConfigService, private store: Store<FormState>) {}
 
   get state(): FormState {
     return this.store.state
@@ -44,10 +46,15 @@ export class FormService {
 
   onItemSelected(item: any) {
     if (!item) {
+      this.selectedElement = null
       this.styleForm = this.paramForm = null
       this.styleFormFields = this.paramFormFields = []
       return
     }
+
+    this.selectedElement = item
+
+    console.log("onItemSelected", item)
 
     this.paramForm = item.formparam.formgroup
     this.paramFormFields = item.formparam.fields

@@ -1,4 +1,4 @@
-<nz-layout class="app-layout">
+<nz-layout class="app-layout" *ngIf="config._state$ | async as config">
   <nz-header class="app-header">
     <button class="trigger" (click)="isCollapsed = !isCollapsed">
       <i class="icon-Layout-grid"></i>
@@ -10,20 +10,20 @@
     <div class="right">
       <ul class="horizontal-list">
         <li class="text-ellipsis hide-on-mobile">
-          {{ config.state.currentUser?.name }}
+          {{ config.currentUser?.name }}
         </li>
         <li>
           <nz-avatar
             nzIcon="user"
-            [ngClass]="{ 'bg-info': !config.state.currentUser?.image }"
-            [nzSrc]="config.state.currentUser?.image"
+            [ngClass]="{ 'bg-info': !config.currentUser?.image }"
+            [nzSrc]="config.currentUser?.image"
             nz-dropdown
             nzTrigger="click"
             [nzDropdownMenu]="UserMenu"
           ></nz-avatar>
           <nz-dropdown-menu #UserMenu="nzDropdownMenu">
             <ul nz-menu [nzTheme]="'light'">
-              <li style="color: #0bbe84; font-weight: bold" nz-menu-group [nzTitle]="config.state.currentUser?.name"></li>
+              <li style="color: #0bbe84; font-weight: bold" nz-menu-group [nzTitle]="config.currentUser?.name"></li>
               <li nz-menu-divider></li>
               <li nz-menu-item>
                 <a class="text" translate> <i nz-icon nzType="user" class="success"></i> PROFILE </a>
@@ -45,10 +45,10 @@
       [nzTrigger]="null"
       [nzCollapsedWidth]="0"
       [(nzCollapsed)]="isCollapsed"
-      [nzTheme]="config.state.theme"
+      [nzTheme]="config.theme"
     >
-      <ul nz-menu nzMode="inline" nzMatchRouter [nzInlineCollapsed]="isCollapsed" [nzTheme]="config.state.theme">
-        <ng-container *ngFor="let menu of config.state.menus">
+      <ul nz-menu nzMode="inline" nzMatchRouter [nzInlineCollapsed]="isCollapsed" [nzTheme]="config.theme">
+        <ng-container *ngFor="let menu of config.menus">
           <li *ngIf="menu.children" nz-submenu [nzTitle]="nzsubmenutitle">
             <ul>
               <ng-container *ngFor="let child of menu.children">
