@@ -1,11 +1,11 @@
-import { EventEmitter, Output } from '@angular/core';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { SelectConfig } from './select.interface';
-import { defaultsDeep } from 'lodash-es';
+import { EventEmitter, Output, OnChanges } from "@angular/core"
+import { Component, Input, OnInit } from "@angular/core"
+import { FormControl } from "@angular/forms"
+import { SelectConfig } from "./select.interface"
+import { defaultsDeep } from "lodash-es"
 
 @Component({
-  selector: 'dms-select',
+  selector: "dms-select",
   template: `
     <nz-select
       [formControl]="formControl"
@@ -29,17 +29,13 @@ import { defaultsDeep } from 'lodash-es';
       [nzSize]="config.size"
       [nzSuffixIcon]="config.suffixIcon"
       [nzMode]="config.selectMode"
-      [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+      [ngStyle]="{ 'pointer-events': config.readOnly || config.disabled ? 'none' : 'auto' }"
     >
       <ng-container *ngIf="config.selectGroup?.length <= 0; else temp">
         <ng-container *ngFor="let option of config.options">
           <nz-option
             [nzValue]="option.value"
-            [nzLabel]="
-              config.translate === 'yes'
-                ? (option.label | translate)
-                : option.label
-            "
+            [nzLabel]="config.translate === 'yes' ? (option.label | translate) : option.label"
             [nzHide]="option.hide"
             [nzDisabled]="option.disabled"
           ></nz-option>
@@ -51,11 +47,7 @@ import { defaultsDeep } from 'lodash-es';
             <nz-option
               *ngFor="let option of group.options"
               [nzValue]="option.value"
-              [nzLabel]="
-                config.translate === 'yes'
-                  ? (option.label | translate)
-                  : option.label
-              "
+              [nzLabel]="config.translate === 'yes' ? (option.label | translate) : option.label"
               [nzHide]="option.hide"
               [nzDisabled]="option.disabled"
             ></nz-option>
@@ -75,21 +67,27 @@ import { defaultsDeep } from 'lodash-es';
     `,
   ],
 })
-export class SelectComponent implements OnInit {
-  @Input() config: SelectConfig = {};
-  @Input() formControl: FormControl = new FormControl();
+export class SelectComponent implements OnInit, OnChanges {
+  @Input() config: SelectConfig = {}
+  @Input() formControl: FormControl = new FormControl()
 
-  @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
+
+  defaultConfig = {
+    showArrow: true,
+    showSearch: true,
+    selectMode: "default",
+    allowClear: true,
+    translate: "yes",
+  }
 
   constructor() {}
 
+  ngOnChanges(): void {
+    this.config = defaultsDeep(this.config, this.defaultConfig)
+  }
+
   ngOnInit() {
-    this.config = defaultsDeep(this.config, {
-      showArrow: true,
-      showSearch: true,
-      selectMode: 'default',
-      allowClear: true,
-      translate: 'yes',
-    });
+    this.config = defaultsDeep(this.config, this.defaultConfig)
   }
 }

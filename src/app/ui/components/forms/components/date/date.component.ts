@@ -26,7 +26,7 @@ import { merge } from "lodash-es"
       (ngModelChange)="onChange.emit($event)"
       [formControl]="formControl"
       style="width:100%"
-      [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+      [ngStyle]="{ 'pointer-events': config.readOnly || config.disabled ? 'none' : 'auto' }"
     ></nz-date-picker>
   `,
 })

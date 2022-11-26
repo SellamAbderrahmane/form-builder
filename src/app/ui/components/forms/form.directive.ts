@@ -49,9 +49,7 @@ export class FormDirective implements OnInit, OnDestroy {
     const type = typeof this.field.type === "function" ? this.field.type(this.model) : this.field.type
     this.compRef = this.viewContainerRef.createComponent(WRAPPERS[type] || WRAPPERS["text"])
 
-    if (this.field.type === "checkbox") {
-      this.compRef.instance.group = this.field.itemGroup
-    } else this.compRef.instance.config = this.field
+    this.compRef.instance.config = this.field
 
     this.compRef.instance.formControl = this.formControl
     this.compRef.instance.onChange = this.onChange

@@ -6,12 +6,14 @@ import {
   InputComponent,
   SelectComponent,
   SwitchComponent,
-} from './components';
-import { FormComponent } from './form.component';
+  SelectOptionsComponent,
+  CheckboxOptionsComponent,
+} from "./components"
+import { FormComponent } from "./form.component"
 
-export * from './components';
-export * from './form.interface';
-export * from './form.component';
+export * from "./components"
+export * from "./form.interface"
+export * from "./form.component"
 
 export const FORM_COMPONENTS: any[] = [
   InputComponent,
@@ -22,4 +24,6 @@ export const FORM_COMPONENTS: any[] = [
   DateComponent,
   FormComponent,
   EditableComponent,
-];
+  SelectOptionsComponent,
+  CheckboxOptionsComponent,
+]

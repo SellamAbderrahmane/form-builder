@@ -9,7 +9,7 @@ import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { FormDirective } from './components/forms/form.directive';
 import { FileInfoPipe } from './components/upload/upload.pipe';
 import { TranslateModule } from '@ngx-translate/core';
-import { UI_DIRECTIVES, UI_PIPES } from './directives_pipes';
+import { DragDropManagerService, UI_DIRECTIVES, UI_PIPES } from './directives_pipes';
 import { NzModule } from './nz.module';
 
 const ngZorroConfig: NzConfig = {
@@ -35,7 +35,7 @@ const ngZorroConfig: NzConfig = {
     ...UI_PIPES,
   ],
   entryComponents: [...FORM_COMPONENTS, TableCellRender],
-  providers: [{ provide: NZ_CONFIG, useValue: ngZorroConfig }],
+  providers: [DragDropManagerService, { provide: NZ_CONFIG, useValue: ngZorroConfig }],
   exports: [
     NzModule,
     FormsModule,

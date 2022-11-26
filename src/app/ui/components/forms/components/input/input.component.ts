@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { FormControl } from "@angular/forms"
 import { InputConfig } from "./input.interface"
 
-import { merge } from "lodash-es"
+import { defaultsDeep, merge } from "lodash-es"
 
 @Component({
   selector: "dms-input",
@@ -42,7 +42,7 @@ import { merge } from "lodash-es"
         [attr.readonly]="config.readOnly ? true : null"
         [placeholder]="config.placeholder | translate"
         [autocomplete]="config.autocomplete"
-        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+        [ngStyle]="{ 'pointer-events': config.readOnly || config.disabled ? 'none' : 'auto' }"
       ></textarea>
       <input
         nz-input
@@ -56,8 +56,7 @@ import { merge } from "lodash-es"
         [pattern]="config.pattern"
         [autocomplete]="config.autocomplete"
         [attr.readonly]="config.readOnly ? true : null"
-        [attr.disabled]="config.disabled"
-        [ngStyle]="{ 'pointer-events': config.readOnly ? 'none' : 'auto' }"
+        [ngStyle]="{ 'pointer-events': config.readOnly || config.disabled ? 'none' : 'auto' }"
       />
     </ng-template>
   `,
@@ -69,26 +68,26 @@ export class InputComponent implements OnInit, OnChanges {
   @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
 
   passwordVisible: boolean = false
+  defaultConfig = {
+    name: "default",
+    placeholder: "",
+    group: false,
+    disabled: false,
+    type: "text",
+    nzAutosize: true,
+    autocomplete: "off",
+  }
 
   constructor() {}
 
   ngOnChanges(): void {
-    this.config = merge(
-      {
-        name: "default",
-        placeholder: "",
-        group: false,
-        disabled: false,
-        type: "text",
-        nzAutosize: true,
-        autocomplete: "off",
-      },
-      this.config
-    )
+    this.config = defaultsDeep(this.config, this.defaultConfig)
+    this.config.disabled ? this.formControl.disable() : this.formControl.enable()
   }
 
   ngOnInit() {
-    if (this.config.value) {
+    this.config = defaultsDeep(this.config, this.defaultConfig)
+    if (this.config.value && !this.formControl.value) {
       this.formControl.setValue(this.config.value)
     }
 

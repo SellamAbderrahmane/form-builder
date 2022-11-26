@@ -1,20 +1,14 @@
 import { Injectable } from "@angular/core"
-import { keyBy, mapValues } from "lodash-es"
+import { reduce } from "lodash-es"
 
-import { FormState } from "../form.state"
-import { HttpService } from "src/app/shared"
-import { Store, StoreService } from "src/app/store"
-import { APPCONFIG } from "src/app/shared/config"
+import { FormsState } from "../forms.state"
+import { Store } from "src/app/store"
+import { FormBuilder } from "@angular/forms"
+import { v4 } from "uuid"
 
 @Injectable()
-export class FormConfigService {
-  gconfig: APPCONFIG
-
-  constructor(private http: HttpService, private store: Store<FormState>, public storeService: StoreService) {
-    storeService.select("config").subscribe((c) => {
-      this.gconfig = c
-    })
-  }
+export class FormsConfigService {
+  constructor(private store: Store<FormsState>, private fb: FormBuilder) {}
 
   async init() {
     this.store.setState({
@@ -39,6 +33,7 @@ export class FormConfigService {
         icon: "pic-left",
         children: [
           {
+            id: v4(),
             type: "row",
             menuConfig: {
               class: "input",
@@ -55,6 +50,7 @@ export class FormConfigService {
             ],
           },
           {
+            id: v4(),
             type: "row",
             menuConfig: {
               class: "input",
@@ -77,6 +73,7 @@ export class FormConfigService {
             ],
           },
           {
+            id: v4(),
             type: "row",
             menuConfig: {
               class: "input",
@@ -105,6 +102,7 @@ export class FormConfigService {
             ],
           },
           {
+            id: v4(),
             type: "row",
             menuConfig: {
               class: "input",
@@ -144,71 +142,55 @@ export class FormConfigService {
         icon: "setting",
         children: [
           {
+            id: v4(),
             type: "editable",
             menuConfig: {
               name: "Text",
               icon: "font-size",
             },
-            style: {
-              border: "1px solid red",
-              cursor: "pointer",
-            },
           },
           {
+            id: v4(),
             type: "text",
             menuConfig: {
-              name: "Text field",
+              name: "Paragraph",
               icon: "font-size",
             },
           },
           {
+            id: v4(),
             type: "number",
             menuConfig: {
               name: "Number field",
               icon: "font-size",
             },
-            style: {
-              border: "1px solid red",
-              cursor: "pointer",
-            },
           },
           {
+            id: v4(),
             type: "select",
+            defaultConfig: {
+              disabled: true,
+            },
             menuConfig: {
               name: "Drop-down",
               icon: "font-size",
             },
-            style: {
-              border: "1px solid red",
-              cursor: "pointer",
-            },
           },
           {
+            id: v4(),
             type: "checkbox",
-            label: "ff",
             group: true,
-            value: [
-              { label: "Apple", value: "Apple", checked: true },
-              { label: "Pear", value: "Pear", checked: false },
-            ],
             menuConfig: {
-              name: "Checkbox",
+              name: "Checkbox options",
               icon: "font-size",
             },
-            style: {
-              border: "1px solid red",
-              cursor: "pointer",
-            },
           },
           {
+            id: v4(),
             type: "date",
             menuConfig: {
               name: "Date",
               icon: "font-size",
-            },
-            style: {
-              border: "1px solid red",
-              cursor: "pointer",
             },
           },
         ],
@@ -219,8 +201,8 @@ export class FormConfigService {
   async loadFormElementsParams() {
     return {
       input: {
-        param: {
-          label: {
+        param: [
+          {
             span: 24,
             group: true,
             key: "label",
@@ -229,7 +211,7 @@ export class FormConfigService {
             label: "Label",
             placeholder: "Label",
           },
-          placeholder: {
+          {
             span: 24,
             group: true,
             type: "text",
@@ -237,7 +219,7 @@ export class FormConfigService {
             label: "Placeholder",
             placeholder: "Enter placeholder",
           },
-          description: {
+          {
             span: 24,
             group: true,
             type: "text",
@@ -245,12 +227,18 @@ export class FormConfigService {
             label: "Description",
             placeholder: "Enter description",
           },
-        },
-        style: {},
+          {
+            span: 24,
+            key: "required",
+            type: "checkbox",
+            label: "Required",
+          },
+        ],
+        style: [],
       },
       editable: {
-        param: {
-          value: {
+        param: [
+          {
             span: 24,
             group: true,
             type: "text",
@@ -259,9 +247,9 @@ export class FormConfigService {
             label: "Title",
             placeholder: "Enter title",
           },
-        },
-        style: {
-          "text-align": {
+        ],
+        style: [
+          {
             span: 24,
             group: true,
             key: "text-align",
@@ -275,7 +263,7 @@ export class FormConfigService {
               { label: "Right", value: "right" },
             ],
           },
-          "font-size": {
+          {
             span: 24,
             group: true,
             key: "font-size",
@@ -285,70 +273,161 @@ export class FormConfigService {
             pattern: "^[0-9]*(s)?{rem|px|em}$",
             placeholder: "Font size",
           },
-        },
+        ],
       },
-      // date: {
-      //   dateMode: {
-      //     span: 24,
-      //     group: true,
-      //     key: "dateMode",
-      //     type: "select",
-      //     label: "Type",
-      //     placeholder: "Type",
-      //     options: [
-      //       { label: "Week", value: "week" },
-      //       { label: "Month", value: "month" },
-      //     ],
-      //   },
-      // },
-      // select: {},
+      select: {
+        param: [
+          {
+            span: 24,
+            group: true,
+            key: "label",
+            type: "text",
+            // prefixIcon: "lock",
+            label: "Label",
+            placeholder: "Label",
+          },
+          {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "placeholder",
+            label: "Placeholder",
+            placeholder: "Enter placeholder",
+          },
+          {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "description",
+            label: "Description",
+            placeholder: "Enter description",
+          },
+          {
+            span: 24,
+            key: "required",
+            type: "checkbox",
+            label: "Required",
+          },
+          {
+            span: 24,
+            group: true,
+            key: "options",
+            type: "selectOptions",
+            label: "Options",
+            placeholder: "Add option",
+          },
+        ],
+        style: [],
+      },
+      checkbox: {
+        param: [
+          {
+            span: 24,
+            group: true,
+            key: "label",
+            type: "text",
+            // prefixIcon: "lock",
+            label: "Label",
+            placeholder: "Label",
+          },
+          {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "description",
+            label: "Description",
+            placeholder: "Enter description",
+          },
+          {
+            span: 24,
+            key: "required",
+            type: "checkbox",
+            label: "Required",
+          },
+          {
+            span: 24,
+            key: "value",
+            type: "checkboxOptions",
+            label: "Options",
+            value: [{ label: "Option 1", value: "Option 1" }],
+            placeholder: "Add option",
+          },
+        ],
+      },
+      date: {
+        param: [
+          {
+            span: 24,
+            group: true,
+            key: "label",
+            type: "text",
+            // prefixIcon: "lock",
+            label: "Label",
+            placeholder: "Label",
+          },
+          {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "placeholder",
+            label: "Placeholder",
+            placeholder: "Enter placeholder",
+          },
+          {
+            span: 24,
+            group: true,
+            type: "text",
+            key: "description",
+            label: "Description",
+            placeholder: "Enter description",
+          },
+          {
+            span: 24,
+            key: "required",
+            type: "checkbox",
+            label: "Required",
+          },
+        ],
+        style: [],
+      },
     }
   }
 
-  getElementFormData(type: any) {
+  generateElementGroup(fields: any[]) {
+    return reduce(
+      fields,
+      (acc, p) => {
+        acc[p.key] = Array.isArray(p.value) ? [p.value] : p.value
+        return acc
+      },
+      {}
+    )
+  }
+
+  getElementFormdata(type: any) {
     const { formElementParams } = this.store.state
+    let object = formElementParams[type]
+    if (["text", "input", "number"].includes(type)) {
+      object = formElementParams.input
+    }
 
-    switch (type) {
-      case "text":
-      case "password":
-      case "number":
-        const param = {
-          fields: Object.values(formElementParams.input.param),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.param)), (k) => formElementParams.input.param[k]?.value),
-        }
-
-        const style = {
-          fields: Object.values(formElementParams.input.style),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams.input.style)), (k) => formElementParams.input.style[k]?.value),
-        }
-
-        return { param, style }
-      default: {
-        const object = formElementParams[type]
-        if (!object)
-          return {
-            param: {
-              fields: [],
-              formgroup: {},
-            },
-            style: {
-              fields: [],
-              formgroup: {},
-            },
-          }
-
-        const param = {
-          fields: Object.values(formElementParams[type].param),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].param)), (k) => formElementParams[type].param[k]?.value),
-        }
-
-        const style = {
-          fields: Object.values(formElementParams[type].style),
-          formgroup: mapValues(keyBy(Object.keys(formElementParams[type].style)), (k) => formElementParams[type].style[k]?.value),
-        }
-
-        return { param, style }
+    if (!object) {
+      return {
+        paramfields: [],
+        paramgroup: this.fb.group({}),
+        stylefields: [],
+        stylegroup: this.fb.group({}),
       }
+    }
+
+    const paramgroup = this.generateElementGroup(object.param)
+    const stylegroup = this.generateElementGroup(object.style)
+
+    return {
+      paramfields: object.param,
+      paramgroup: this.fb.group(paramgroup),
+      stylefields: object.style,
+      stylegroup: this.fb.group(stylegroup),
     }
   }
 }

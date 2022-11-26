@@ -1,0 +1,62 @@
+<nz-layout class="module-layout" *ngIf="store._state$ | async as state">
+  <nz-sider class="style-sider" nzWidth="300px" [nzTheme]="'light'" *ngIf="state.selectedElement && !previewMode.value">
+    <dms-form [fields]="state.selectedElement.paramfields" [formGroup]="state.selectedElement.paramgroup" [showFooter]="false"> </dms-form>
+    <dms-form [fields]="state.selectedElement.stylefields" [formGroup]="state.selectedElement.stylegroup" [showFooter]="false"> </dms-form>
+  </nz-sider>
+  <nz-content>
+    <form
+      nz-form
+      cdkDropList
+      class="form-area"
+      id="formContainer"
+      nzLayout="vertical"
+      dragAndDropManager
+      (cdkDropListDropped)="droped($event)"
+      [cdkDropListData]="state.formData?.children"
+    >
+      <ng-container *ngFor="let element of state.formData?.children; let i = index" [ngSwitch]="element.type">
+        <nz-row *ngSwitchCase="'row'" [ngClass]="{ 'section-row': !previewMode.value }" cdkDrag cdkDragDisabled>
+          <nz-col
+            cdkDropList
+            dragAndDropManager
+            [cdkDropListData]="col.children"
+            *ngFor="let col of element.children"
+            [nzSpan]="24 / element.children.length"
+            (cdkDropListDropped)="droped($event)"
+          >
+            <forms-element
+              *ngFor="let colEl of col.children; let colIdx = index"
+              [element]="colEl"
+              [previewMode]="previewMode.value"
+              [style]="colEl.stylegroup?.value"
+              [config]="colEl.paramgroup?.value"
+              (onselect)="onselect($event)"
+              (ondelete)="ondelete(colEl, colIdx, element.children)"
+            ></forms-element>
+          </nz-col>
+          <div class="row-controls" *ngIf="!previewMode.value">
+            <button nz-button nzSize="small" nzDanger nzShape="circle" (click)="ondelete(element, i, state.formData)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </div>
+        </nz-row>
+        <forms-element
+          *ngSwitchDefault
+          [element]="element"
+          [previewMode]="previewMode.value"
+          [style]="element.stylegroup?.value"
+          [config]="element.paramgroup?.value"
+          (onselect)="onselect($event)"
+          (ondelete)="ondelete(element, i, state.formData)"
+        ></forms-element>
+      </ng-container>
+    </form>
+    <div class="footer">
+      <label nz-checkbox [formControl]="previewMode">Preview mode</label>
+      <button nz-button nzType="primary" (click)="service.onSubmit()">Submit</button>
+    </div>
+  </nz-content>
+  <nz-sider nzWidth="360px" [nzTheme]="'light'">
+    <forms-elements [previewMode]="previewMode.value" [formElements]="state.formElements"></forms-elements>
+  </nz-sider>
+</nz-layout>

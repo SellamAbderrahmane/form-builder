@@ -14,7 +14,8 @@ body {
   position: relative;
 }
 
-*, *:focus {
+*,
+*:focus {
   outline: 0;
 }
 
@@ -40,7 +41,30 @@ body {
 
   &:hover {
     opacity: 1;
-    transform: scale(.7);
+    transform: scale(0.7);
     background-color: gray;
   }
+}
+
+::-webkit-scrollbar {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 7px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: $primay-color;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f0f0f080;
+  border-radius: 2px;
 }

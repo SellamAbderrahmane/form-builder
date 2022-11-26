@@ -5,3 +5,7 @@ export interface CheckboxConfig extends FormItem {
   group?: boolean
   indeterminate?: boolean
 }
+
+export interface CheckboxOptionsConfig extends FormItem {
+  
+}

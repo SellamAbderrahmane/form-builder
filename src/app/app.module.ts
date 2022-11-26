@@ -16,7 +16,6 @@ import { ConfigService, HttpService, SHARED_SERVICES, TranslateService } from ".
 import { AppComponent } from "./app.component"
 import { LayoutComponent } from "./ui/layouts/layout.component"
 import { StoreModule } from "./store"
-import { AppModulesModule } from "./modules/modules.module"
 
 @NgModule({
   declarations: [AppComponent, LayoutComponent],

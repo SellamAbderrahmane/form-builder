@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import {
   CheckboxComponent,
   CheckboxConfig,
+  CheckboxOptionsComponent,
   DateComponent,
   DateConfig,
   EditableComponent,
@@ -14,6 +15,7 @@ import {
   SwitchComponent,
   SwitchConfig,
 } from './components';
+import { SelectOptionsComponent } from './components/select/options.component';
 
 export interface FormConfig {
   layout?: 'horizontal' | 'vertical' | 'inline';
@@ -31,6 +33,7 @@ export declare type INPUTS =
   | 'checkbox'
   | 'slider'
   | 'select'
+  | 'selectOptions'
   | 'textArea'
   | 'date'
   | 'editable'
@@ -86,7 +89,9 @@ export const WRAPPERS: { [T: string]: any } = {
   phone: InputComponent,
   editable: EditableComponent,
   checkbox: CheckboxComponent,
+  checkboxOptions: CheckboxOptionsComponent,
   select: SelectComponent,
+  selectOptions: SelectOptionsComponent,
   switch: SwitchComponent,
   // radio: FormInputComponent
   textArea: InputComponent,

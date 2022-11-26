@@ -1,7 +1,12 @@
 @import "variables";
 
-::ng-deep .ant-tabs {
+.ant-tabs {
+  height: 100%;
   min-height: 100%;
+
+  .ant-tabs-content-holder {
+    overflow: auto;
+  }
 
   .ant-tabs-tabpane {
     padding-right: 0 !important;
@@ -23,11 +28,19 @@
       background-color: $white-color;
     }
 
-    .form-aria {
-      display: block;
+    .form-area {
       flex: auto;
+
+      nz-row.section-row {
+        position: relative;
+        border: 0.5px solid #2196f3;
+      }
+
+      nz-row.section-row + * {
+        border-top: none;
+      }
     }
-  
+
     .footer {
       display: flex;
       gap: 1rem;
@@ -69,19 +82,57 @@
       }
     }
   }
-
-  form-element:has(nz-row.section-row) {
-    display: block;
-    position: relative;
-    border: 0.5px solid #2196f3;
-  }
-
-  form-element:has(nz-row.section-row) + * {
-    border-top: none;
-  }
 }
 
 .style-sider {
   padding: 1em;
+  overflow: auto;
   box-shadow: $base-shadow;
+}
+
+//form element
+#elementContainer {
+  position: relative;
+  padding: 0.2em;
+  border-radius: 5px;
+  // overflow-x: scroll;
+}
+
+.active-container {
+  border: 1px solid #2196f3;
+}
+
+.element-controls {
+  position: absolute;
+  top: 0;
+  transform: translate(0, -50%);
+  right: 0.5em;
+  display: flex;
+  gap: 4px;
+  background: white;
+  padding: 0 0.5em;
+}
+
+.section-row {
+  position: relative;
+  flex: auto;
+}
+
+.section-row nz-col {
+  padding: 1em;
+}
+
+.section-row > nz-col + nz-col {
+  border-left: 0.5px solid #2196f3;
+}
+
+.section-row .row-controls {
+  position: absolute;
+  top: 0;
+  transform: translate(0, -50%);
+  left: 0.5em;
+  display: flex;
+  gap: 4px;
+  background: white;
+  padding: 0 0.5em;
 }
